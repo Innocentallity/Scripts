@@ -1,0 +1,120 @@
+local Material = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kinlei/MaterialLua/master/Module.lua"))()
+
+local X = Material.Load({
+    Title = "Innohub V1",
+    Style = 3,
+    SizeX = 500,
+    SizeY = 350,
+    Theme = "Dark",
+})
+-- Pages
+local InnoCentCool = X.New({
+    Title = "Epic scripts"
+})
+
+local Other stuff = X.New({
+    Title = "Other"
+})
+
+local Creditss = X.New({
+    Title = "Credits"
+})
+
+-- Scripts
+local uh = InnoCentCool.Button({
+    Text = "Monky in locker (NON FE)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/Monky%20script"))();
+    end,
+})
+
+
+local uhm = InnoCentCool.Button({
+    Text = "Owl hub (Not made by me)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ZinityDrops/OwlHubLink/master/OwlHubBack.lua"))();
+    end,
+    Menu = {
+        Information = function(self)
+            X.Banner({
+                Text = "This script is so epic."
+            })
+        end
+    }
+}
+)
+
+local uhmm = InnoCentCool.Button({
+    Text = "Autofarm (Bannable)",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/Autofarm"))();
+    end,
+})
+
+local uhmmm = InnoCentCool.Button({
+    Text = "Don't click this.",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/FeDevSkins"))();
+    end,
+})
+
+local uhmmmm = Other stuff.Button({
+    Text = "Placeholder",
+    Callback = function()
+        
+    end,
+})
+
+local uhmmmmm = Other stuff.Button({
+    Text = "Placeholder2",
+    Callback = function()
+        
+    end,
+
+})
+
+local uhmmmmmm = Creditss.Label({
+    Text = "lolcat#1165",
+    Callback = function()
+        
+    end,
+
+})
+
+
+local uhmmmmmmm = Creditss.Label({
+    Text = "Storm.#1020",
+    Callback = function()
+        
+    end,
+
+})
+
+local uhmmmmmmmm = Creditss.Label({
+    Text = "Inno#4988",
+    Callback = function()
+        
+    end,
+
+})
+
+
+local uhmmmmmmmmm = Creditss.Button({
+    Text = "Join the discord server (Will copy to clipboard)",
+    Callback = function()
+     setclipboard("https://discord.gg/ayBpHHGBAK")   
+    end,
+
+})
+
+
+local uhmmmmmmmmm = InnoCentCool.Button({
+    Text = "Gun mods",
+    Callback = function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/Gun%20mod"))();
+    end,
+
+})
+
+
+print("Loaded")
