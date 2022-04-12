@@ -1,0 +1,93 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local InnohubLoader = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local ImageLabel = Instance.new("ImageLabel")
+local TextLabel = Instance.new("TextLabel")
+
+--Properties:
+
+InnohubLoader.Name = "Innohub Loader"
+InnohubLoader.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+InnohubLoader.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = InnohubLoader
+Frame.AnchorPoint = Vector2.new(0.5, 0.5)
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.Position = UDim2.new(0.5, 0, -2.0940001, 0)
+Frame.Size = UDim2.new(0, 50, 0, 50)
+
+ImageLabel.Parent = Frame
+ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageLabel.Size = UDim2.new(0, 100, 0, 100)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=9349764246"
+
+TextLabel.Parent = InnohubLoader
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(1, 0, 0.386999995, 0)
+TextLabel.Size = UDim2.new(0.15488565, 0, 0.0517529212, 0)
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "Innohub loaded"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 36.000
+TextLabel.TextStrokeTransparency = 0.000
+TextLabel.TextWrapped = true
+
+-- Scripts:
+
+local function HOSXP_fake_script() -- Frame.FrameMoveScript 
+	local script = Instance.new('LocalScript', Frame)
+
+	wait("3")
+	script.Parent:TweenPosition(UDim2.new(0.5,0,0.4,0),"Out","Sine",1.5)
+	wait("3")
+	script.Parent:TweenPosition(UDim2.new(1.5,0,0.01,0),"Out","Sine",1.7)
+end
+coroutine.wrap(HOSXP_fake_script)()
+local function CYPOUN_fake_script() -- TextLabel.TextMoveScript 
+	local script = Instance.new('LocalScript', TextLabel)
+
+	wait(1)
+	script.Parent:TweenPosition(UDim2.new(0,0,0.01,0),"Out","Sine",1.7)
+	wait(5)
+	script.Parent:TweenPosition(UDim2.new(-1,0,0.01,0),"Out","Sine",1.7)
+end
+coroutine.wrap(CYPOUN_fake_script)()
+wait("7")
+local UILibrary = loadstring(game:HttpGet("https://pastebin.com/raw/V1ca2q9s"))()
+
+local MainUI = UILibrary.Load("InnoHub - Version 1")
+local FirstPage = MainUI.AddPage("Skins")
+local SecondPage = MainUI.AddPage("GUIs")
+local ThirdPage = MainUI.AddPage("Credits")
+
+local FirstButton = FirstPage.AddButton("Unlock all skins", function()
+    print("All skins unlocked! Made by Inno#0005")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/UNLOCK%20ALL!%3F%20NO%20WAY%20%3Ascreaming%20face%3A"))();
+end)
+
+local SecondButton = FirstPage.AddButton("Unlock all melees", function()
+    print("All melees unlocked! Made by Inno#0005")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/UNLOCK%20ALL%20MELEES%3F!%3F!%3F!%3F!%3F%20NO%20WAY%20BRO%20WTF..%3F"))();
+end)
+    
+local ThirdButton = SecondPage.AddButton("BM Bypass", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/BM%20bypass"))();
+end)
+
+local FourthButtonNoWay = SecondPage.AddButton("Ban menu (Requires BM Bypass)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/BAN%20MENU%3F%20NO%20WAY%20HOLY%20SHIT%20WHAT%20THE%20FUCK!%3F!%3F%20NO%20WAY%20BRO%20NOOO%20WAYAYY%20HOLDDYDY%20YWASJKNSJHFDNKSHBJCDNKASN%20NO%20WAY!%3F!%3F"))();
+end)
+
+local FirstLabelYay = ThirdPage.AddLabel("LosSantosDev#0901 - Ban menu and bypass.")
+local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins and Melees.")
+
+local FifthButton = ThirdPage.AddButton("Join the discord (Link will copy to clipboard)", function()
+    setclipboard("https://discord.gg/N9Xg6xAkfB")
+end)
