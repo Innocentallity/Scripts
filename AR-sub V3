@@ -1,0 +1,8 @@
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Visible = true
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Top.ImageLabel.TextLabel.Text = "AR-Sub V3"
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.BB:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.boosts:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.Penalize:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.BOMB:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.obj:Destroy()
+game:GetService("Players").LocalPlayer.PlayerGui.Menew.Bombfest.Frame.OK.bye.TextLabel.Text = "Join AR-Sub V3"
