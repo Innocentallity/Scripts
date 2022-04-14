@@ -86,14 +86,17 @@ local FourthButtonNoWay = SecondPage.AddButton("Ban menu (Requires BM Bypass)", 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/BAN%20MENU%3F%20NO%20WAY%20HOLY%20SHIT%20WHAT%20THE%20FUCK!%3F!%3F%20NO%20WAY%20BRO%20NOOO%20WAYAYY%20HOLDDYDY%20YWASJKNSJHFDNKSHBJCDNKASN%20NO%20WAY!%3F!%3F"))();
 end)
 
-local SixthButtonQ = FourthPage.AddButton("AR sub regular", function()
+local SixthButtonQ = FourthPage.AddButton("AR sub regular v3", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-sub%20V3%20(Inno%20version)"))();
 end)
 
+local SeventhButtonQ = FourthPage.AddButton("AR sub v4", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-Sub%20v4"))();
+end)
+
 local FirstLabelYay = ThirdPage.AddLabel("LosSantosDev#0901 - Ban menu and bypass")
-local FourthLabel = ThirdPage.AddLabel("MikeyXD#9235 - Ban menu")
+local FourthLabel = ThirdPage.AddLabel("MikeyXD#9235 - Ban menu and AR-sub V4")
 local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins, Melees and AR-sub V3 Regular")
-local ThirdLabel = ThirdPage.AddLabel("Placeholder#0000 - Placeholder")
 
 local FifthButton = ThirdPage.AddButton("Join Inno's Discord (Link will copy to clipboard)", function()
     setclipboard("https://discord.gg/N9Xg6xAkfB")
