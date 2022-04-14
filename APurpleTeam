@@ -1,0 +1,4 @@
+print("sansundertalereal")
+game.ReplicatedStorage.Events.JoinTeam:FireServer("TPC\0")
+wait("10")
+print("holy fucking shit ar-sub purple team no way screaming emoji x4")
