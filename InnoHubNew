@@ -62,10 +62,11 @@ coroutine.wrap(CYPOUN_fake_script)()
 wait("7")
 local UILibrary = loadstring(game:HttpGet("https://pastebin.com/raw/V1ca2q9s"))()
 
-local MainUI = UILibrary.Load("InnoHub - Version 1")
+local MainUI = UILibrary.Load("InnoHub - Version 1.01")
 local FirstPage = MainUI.AddPage("Skins")
 local SecondPage = MainUI.AddPage("GUIs")
 local ThirdPage = MainUI.AddPage("Credits")
+local FourthPage = MainUI.AddPage("Sub places")
 
 local FirstButton = FirstPage.AddButton("Unlock all skins", function()
     print("All skins unlocked! Made by Inno#0005")
@@ -85,9 +86,19 @@ local FourthButtonNoWay = SecondPage.AddButton("Ban menu (Requires BM Bypass)", 
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/BAN%20MENU%3F%20NO%20WAY%20HOLY%20SHIT%20WHAT%20THE%20FUCK!%3F!%3F%20NO%20WAY%20BRO%20NOOO%20WAYAYY%20HOLDDYDY%20YWASJKNSJHFDNKSHBJCDNKASN%20NO%20WAY!%3F!%3F"))();
 end)
 
-local FirstLabelYay = ThirdPage.AddLabel("LosSantosDev#0901 - Ban menu and bypass.")
-local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins and Melees.")
+local SixthButtonQ = FourthPage.AddButton("AR sub regular", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-sub%20V3%20(Inno%20version)"))();
+end)
 
-local FifthButton = ThirdPage.AddButton("Join the discord (Link will copy to clipboard)", function()
+local SeventhButtonQ = FourthPage.AddButton("AR sub GUI", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-sub%20V3"))();
+end)
+
+local FirstLabelYay = ThirdPage.AddLabel("LosSantosDev#0901 - Ban menu and bypass")
+local FourthLabel = ThirdPage.AddLabel("MikeyXD#9235 - Ban menu")
+local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins, Melees and AR-sub V3 Regular")
+local ThirdLabel = ThirdPage.AddLabel("Storm.#1020 - AR-sub V3 GUI")
+
+local FifthButton = ThirdPage.AddButton("Join Inno's Discord (Link will copy to clipboard)", function()
     setclipboard("https://discord.gg/N9Xg6xAkfB")
 end)
