@@ -90,14 +90,10 @@ local SixthButtonQ = FourthPage.AddButton("AR sub regular", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-sub%20V3%20(Inno%20version)"))();
 end)
 
-local SeventhButtonQ = FourthPage.AddButton("AR sub GUI", function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/AR-sub%20V3"))();
-end)
-
 local FirstLabelYay = ThirdPage.AddLabel("LosSantosDev#0901 - Ban menu and bypass")
 local FourthLabel = ThirdPage.AddLabel("MikeyXD#9235 - Ban menu")
 local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins, Melees and AR-sub V3 Regular")
-local ThirdLabel = ThirdPage.AddLabel("Storm.#1020 - AR-sub V3 GUI")
+local ThirdLabel = ThirdPage.AddLabel("Placeholder#0000 - Placeholder")
 
 local FifthButton = ThirdPage.AddButton("Join Inno's Discord (Link will copy to clipboard)", function()
     setclipboard("https://discord.gg/N9Xg6xAkfB")
