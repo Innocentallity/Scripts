@@ -1,0 +1,45 @@
+local Hooks = loadstring(game:HttpGet("https://pastebin.com/raw/ByQs3S0R"))();
+local Core = getsenv(game.Players.LocalPlayer.PlayerGui.Menew.LocalScript);
+local hkGame = Hooks:new(getrawmetatable(game));
+
+local Loadout;
+for i,v in pairs(getupvalues(Core.ViewItems)) do
+    if typeof(v) == "table" then
+        if v.Skins then
+            Loadout = v;
+        end
+    end
+end
+
+for i,v in pairs(game:GetService("ReplicatedStorage").ItemData.Images:GetChildren()) do
+    if v.Name == "Melees" then
+        for _, item in pairs(v:GetChildren()) do
+            table.insert(Loadout[v.Name], item.Name);
+        end
+    end
+end
+
+hkGame:Hook("__namecall", function(self, ...) 
+	local args = {...};
+    if self.Name == "UpdateLoadout" then
+        if args[1][1] == "UpdateLoadout" then
+            local Loadout = args[1][2]
+            game.Players.LocalPlayer.Data.Melee.Value = Loadout.Melee;
+        end
+    end
+
+    if self.Name == "GetInventory" then
+        setupvalue(Core.ViewItems, 1, Loadout);
+    end	
+	return hkGame:getOriginal("__namecall")(self, unpack(args));
+end)
+setupvalue(Core.ViewItems, 1, Loadout);
+
+game:GetService("RunService"):BindToRenderStep("GunSizeChange", 1, function()
+	local LocalPlayer = game:GetService("Players").LocalPlayer;
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Gun") then
+		if LocalPlayer.NRPBS.EquippedTool.Value:match("Knife") then
+			LocalPlayer.Character.Gun.Size = game:GetService("ReplicatedStorage").Melees[LocalPlayer.Data.Melee.Value].Model.Size;
+		end
+	end
+end)
