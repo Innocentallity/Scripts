@@ -3404,5 +3404,5 @@ while true do wait(0.1)
 		x.Visible = true
 		x.Text = "\240\159\147\162"..text
 	end
-	Message("Bolts hi bro")
+	Message("Inno is the best scripter! Bolts is ass 😱😱😱")
 end
