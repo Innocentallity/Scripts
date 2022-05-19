@@ -62,11 +62,14 @@ coroutine.wrap(CYPOUN_fake_script)()
 wait("7")
 local UILibrary = loadstring(game:HttpGet("https://pastebin.com/raw/V1ca2q9s"))()
 
-local MainUI = UILibrary.Load("InnoHub - Version 2.00")
+local MainUI = UILibrary.Load("InnoHub - Version 3.00 (MEGA UPDATE)")
 local FirstPage = MainUI.AddPage("Skins")
 local SecondPage = MainUI.AddPage("GUIs")
 local ThirdPage = MainUI.AddPage("Credits")
 local FourthPage = MainUI.AddPage("Sub places")
+local Shit = MainUI.AddPage("In game")
+local GetShittedOn = MainUI.AddPage("Leaks")
+local InnoCoolKidTab = MainUI.AddPage("FE")
 
 local FirstButton = FirstPage.AddButton("Unlock all skins", function()
     print("All skins unlocked! Made by Inno#0005")
@@ -100,4 +103,61 @@ local SecondLabel = ThirdPage.AddLabel("Inno#0005 - Skins, Melees and AR-sub V3 
 
 local FifthButton = ThirdPage.AddButton("Join Inno's Discord (Link will copy to clipboard)", function()
     setclipboard("https://discord.gg/N9Xg6xAkfB")
+end)
+
+local SeventhasdfasdfasdasffButtonQ = Shit.AddButton("Unlock all melees", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/melees"))();
+end)
+local skinsarereallyhotbuthaveyouheardofamongus = Shit.AddButton("Unlock all skins", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/SkinsInGame"))();
+end)
+local boltshubistrash = GetShittedOn.AddButton("Bolts Hub Premium", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/Skid%20hub%20leak%20ez"))();
+end)
+local InnoIsCool = InnoCoolKidTab.AddButton("FE Block Skin (MWD ONLY)", function()
+    print("Omg did inno skid this??? no he made it in like 20 seconds idiot")
+    game.Players.LocalPlayer.Character["Banana Bod"].Handle.SpecialMesh:Destroy()
+    game.Players.LocalPlayer.Character["Banana Bod"].Handle.Decal:Destroy()
+    game.Players.LocalPlayer.Character.LeftLowerArm:Destroy()
+    game.Players.LocalPlayer.Character.LeftUpperArm:Destroy()
+    game.Players.LocalPlayer.Character.RightLowerArm:Destroy()
+    game.Players.LocalPlayer.Character.RightUpperArm:Destroy()
+    game.Players.LocalPlayer.Character.LeftFoot:Destroy()
+    game.Players.LocalPlayer.Character.LeftLowerLeg:Destroy()
+    game.Players.LocalPlayer.Character.LeftUpperLeg:Destroy()
+    game.Players.LocalPlayer.Character.RightFoot:Destroy()
+    game.Players.LocalPlayer.Character.RightLowerLeg:Destroy()
+    game.Players.LocalPlayer.Character.RightUpperLeg:Destroy()
+end)
+local Innoissexierthanyou = InnoCoolKidTab.AddButton("Free Badge", function()
+game:GetService("ReplicatedStorage").Events.ReplicateGear2:FireServer("coffee");
+end)
+local NglYouAreKindaUgly = InnoCoolKidTab.AddButton("FE Bald Delinquent", function()
+    game.Players.LocalPlayer.Character.Cap.Handle:Destroy()
+    game.Players.LocalPlayer.Character.NerdHair.Handle:Destroy()
+end)
+local Placeholderrealworking2021 = InnoCoolKidTab.AddButton("FE Monky With No Banana (must have MWD)", function()
+    game.Players.LocalPlayer.Character["Banana Bod"].Handle:Destroy()
+end)
+local Iloveukraine = InnoCoolKidTab.AddButton("FE Sunglasses", function()
+    while true do 
+    wait(0.01) 
+    game:GetService("ReplicatedStorage").Events.Sunglasses:FireServer()
+    end
+end)
+local YouLikeCHildren = InnoCoolKidTab.AddButton("FE Headless Head", function()
+    game.Players.LocalPlayer.Character:FindFirstChild("FakeHead"):Destroy()
+end)
+local YouDontLikeCHildren = InnoCoolKidTab.AddButton("Free 4.8k Battlebucks", function()
+local args = {
+    [1] = "BLOXY"
+}
+
+game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+wait(1)
+local args = {
+    [1] = "pog"
+}
+
+game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
 end)
