@@ -3350,25 +3350,25 @@ CombatW:Textbox(
 	end)
 
 Credits:Button('Click To Copy Discord Link',function()
-	setclipboard("discord.gg/CQz5CQKv89")
+	setclipboard("https://discord.gg/N9Xg6xAkfB")
 end)
 
 
 Credits:Label('Bolts Hub v6')
 Credits:Label('Right Ctrl to Toggle the GUI')
-Credits:Label('Bolts 3#7289 - Owner')
+Credits:Label('huge ass skid - Owner')
 Credits:Label('FrontMan𐎺#9917 For More Toggles and usefull (pls do not die)')
 Credits:Label('Trix For More Toggles :)')
-Credits:Label('Nem0 And Calebb for non unlock all skins')
+Credits:Label('kyss')
 Credits:Label('Gbur XD For New UI, new Toggles and Functions')
 Credits:Button('Press for cum',function()
-	local messagebox = messagebox or function(a,b) return ask_prompt(b,a,"Bolty Give Me Mod ur best cummer:)") end return messagebox("Give Mod", "Mining Away, I don't know", 0)
+	print("what")
 end)
 
 
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/Jxereas/UI-Libraries/main/notification_gui_library.lua", true))()
 
-Notification.new("info", "Bolts", "Thank you for using bolts hub :)") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
+Notification.new("info", "Inno", "sub to inno") -- Args(<string> Type, <string> Heading, <string> Body, <boolean?> AutoRemoveNotif, <number?> AutoRemoveTime, <function?> OnCloseFunction)
 
 local notif = Notification.new("success", "Success", "Success body message.")
 notif:changeHeading("New Heading") -- Args(<string> NewHeading)
