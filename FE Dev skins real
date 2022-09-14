@@ -1,0 +1,2 @@
+-- Credits to lolcat lmao
+if not isfile("outro.mp3") then writefile("outro.mp3", game:HttpGet("https://github.com/lolct/hack/blob/main/outro.mp3?raw=true")) end local song = Instance.new("Sound", workspace) song.SoundId = getsynasset("outro.mp3") song:play() task.wait(9.1) game.ReplicatedStorage.Peep:FireServer()
