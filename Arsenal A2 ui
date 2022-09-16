@@ -1,110 +1,128 @@
 -- Credits: Inno#3654, MidnightKrystal, Xonae (For Guis on arsenal trello/twitter) and Gui to Lua creator.
 game.Workspace.Delinquent:Destroy()
 game.Players.LocalPlayer.PlayerGui.Menew.Enabled = false
-
 -- Instances:
-local Credits = Instance.new("ScreenGui")
-local TextLabel = Instance.new("TextLabel")
-local Locker = Instance.new("ScreenGui")
-local LockerMain = Instance.new("ImageLabel")
-local Melee = Instance.new("ImageLabel")
-local KillEffect = Instance.new("ImageLabel")
-local Announcer = Instance.new("ImageLabel")
+
+local Store = Instance.new("ScreenGui")
+local StoreMain = Instance.new("ImageLabel")
 local MenuSelect = Instance.new("ImageButton")
+local username = Instance.new("TextLabel")
+local Delinquent = Instance.new("ImageLabel")
+local TeamSelect = Instance.new("ScreenGui")
+local SelectTeam = Instance.new("ImageLabel")
+local MainMenu = Instance.new("ImageButton")
+local Spawnin = Instance.new("ImageButton")
 local a2concept = Instance.new("ScreenGui")
 local mselect = Instance.new("ImageButton")
 local pselect = Instance.new("ImageButton")
 local DartWarrior = Instance.new("ImageLabel")
 local Nomad = Instance.new("ImageLabel")
 local Deploy = Instance.new("ImageLabel")
+local TeamSelectToggle = Instance.new("ImageButton")
 local Stats = Instance.new("ImageLabel")
 local statuser = Instance.new("TextLabel")
 local Bottombar = Instance.new("ImageLabel")
 local Contracts = Instance.new("ImageLabel")
-local Delinquent = Instance.new("ImageLabel")
+local Delinquent_2 = Instance.new("ImageLabel")
 local pcodestrans = Instance.new("Frame")
 local twittercode = Instance.new("ImageButton")
 local Profile = Instance.new("ImageLabel")
 local Back = Instance.new("ImageButton")
 local PlayerImage = Instance.new("ImageLabel")
-local TextLabel_2 = Instance.new("TextLabel")
+local TextLabel = Instance.new("TextLabel")
 local Badges = Instance.new("ImageButton")
 local ProfileSelect = Instance.new("ImageButton")
 local Codesmenu = Instance.new("ImageLabel")
 local codestext = Instance.new("TextBox")
-local TextLabel_3 = Instance.new("TextLabel")
 local Back_2 = Instance.new("ImageButton")
+local Redeem = Instance.new("TextButton")
 local LockerSelect = Instance.new("ImageButton")
 local Badges_2 = Instance.new("ImageLabel")
 local Profile_2 = Instance.new("ImageButton")
+local ShopSelect = Instance.new("ImageButton")
+local Locker = Instance.new("ScreenGui")
+local LockerMain = Instance.new("ImageLabel")
+local Melee = Instance.new("ImageLabel")
+local KillEffect = Instance.new("ImageLabel")
+local Announcer = Instance.new("ImageLabel")
+local MenuSelect_2 = Instance.new("ImageButton")
 
 --Properties:
 
-Credits.Name = "Credits"
-Credits.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-Credits.Enabled = false
-Credits.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Store.Name = "Store"
+Store.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Store.Enabled = false
+Store.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-TextLabel.Parent = Credits
-TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel.Position = UDim2.new(0.397772461, 0, 0.417637259, 0)
-TextLabel.Size = UDim2.new(0, 200, 0, 50)
-TextLabel.Font = Enum.Font.SourceSans
-TextLabel.Text = "Made By Inno#3654"
-TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.TextScaled = true
-TextLabel.TextSize = 14.000
-TextLabel.TextWrapped = true
-
-Locker.Name = "Locker"
-Locker.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-Locker.Enabled = false
-Locker.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-LockerMain.Name = "LockerMain"
-LockerMain.Parent = Locker
-LockerMain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-LockerMain.BackgroundTransparency = 1.000
-LockerMain.Position = UDim2.new(-0.00911457371, 0, -0.00166389346, 0)
-LockerMain.Size = UDim2.new(0, 1559, 0, 865)
-LockerMain.Image = "http://www.roblox.com/asset/?id=10865228764"
-
-Melee.Name = "Melee"
-Melee.Parent = LockerMain
-Melee.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Melee.BackgroundTransparency = 1.000
-Melee.Position = UDim2.new(0.134701729, 0, 0.124855489, 0)
-Melee.Size = UDim2.new(0, 132, 0, 169)
-Melee.ZIndex = 5
-Melee.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-
-KillEffect.Name = "KillEffect"
-KillEffect.Parent = LockerMain
-KillEffect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-KillEffect.BackgroundTransparency = 1.000
-KillEffect.Position = UDim2.new(0.246311724, 0, 0.124855489, 0)
-KillEffect.Size = UDim2.new(0, 132, 0, 169)
-KillEffect.ZIndex = 5
-KillEffect.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-
-Announcer.Name = "Announcer"
-Announcer.Parent = LockerMain
-Announcer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Announcer.BackgroundTransparency = 1.000
-Announcer.Position = UDim2.new(0.359846056, 0, 0.124855489, 0)
-Announcer.Size = UDim2.new(0, 132, 0, 169)
-Announcer.ZIndex = 5
-Announcer.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+StoreMain.Name = "StoreMain"
+StoreMain.Parent = Store
+StoreMain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+StoreMain.BackgroundTransparency = 1.000
+StoreMain.Position = UDim2.new(-0.000651031733, 0, -0.00166389346, 0)
+StoreMain.Size = UDim2.new(0, 1559, 0, 865)
+StoreMain.Image = "http://www.roblox.com/asset/?id=10925541086"
 
 MenuSelect.Name = "Menu Select"
-MenuSelect.Parent = LockerMain
+MenuSelect.Parent = StoreMain
 MenuSelect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 MenuSelect.BackgroundTransparency = 0.999
-MenuSelect.Position = UDim2.new(0.281659663, 0, 0.0101237819, 0)
-MenuSelect.Size = UDim2.new(0, 162, 0, 56)
+MenuSelect.Position = UDim2.new(0.281659663, 0, 0.00115606934, 0)
+MenuSelect.Size = UDim2.new(0, 162, 0, 63)
 MenuSelect.ZIndex = 4
 MenuSelect.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 MenuSelect.ImageTransparency = 0.999
+
+username.Name = "username"
+username.Parent = StoreMain
+username.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+username.BackgroundTransparency = 1.000
+username.Position = UDim2.new(0.0223717541, 0, 0.72825253, 0)
+username.Size = UDim2.new(0, 216, 0, 34)
+username.ZIndex = 700
+username.Font = Enum.Font.GothamBold
+username.TextColor3 = Color3.fromRGB(255, 255, 255)
+username.TextScaled = true
+username.TextSize = 14.000
+username.TextWrapped = true
+
+Delinquent.Name = "Delinquent"
+Delinquent.Parent = Store
+Delinquent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Delinquent.BackgroundTransparency = 1.000
+Delinquent.Position = UDim2.new(0.213501543, 0, 0.00499179959, 0)
+Delinquent.Size = UDim2.new(0, 1538, 0, 796)
+Delinquent.Image = "http://www.roblox.com/asset/?id=10856542394"
+
+TeamSelect.Name = "TeamSelect"
+TeamSelect.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+TeamSelect.Enabled = false
+TeamSelect.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+SelectTeam.Name = "SelectTeam"
+SelectTeam.Parent = TeamSelect
+SelectTeam.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SelectTeam.BackgroundTransparency = 1.000
+SelectTeam.Position = UDim2.new(-4.01200959e-05, 0, -0.00166386366, 0)
+SelectTeam.Size = UDim2.new(0, 1538, 0, 796)
+SelectTeam.Image = "http://www.roblox.com/asset/?id=10925286854"
+
+MainMenu.Name = "MainMenu"
+MainMenu.Parent = SelectTeam
+MainMenu.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+MainMenu.BackgroundTransparency = 0.999
+MainMenu.Position = UDim2.new(0.00715214573, 0, 0.884162962, 0)
+MainMenu.Size = UDim2.new(0, 205, 0, 40)
+MainMenu.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+MainMenu.ImageTransparency = 0.999
+
+Spawnin.Name = "Spawn in"
+Spawnin.Parent = SelectTeam
+Spawnin.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Spawnin.BackgroundTransparency = 0.999
+Spawnin.Position = UDim2.new(0.14824447, 0, 0.886675537, 0)
+Spawnin.Size = UDim2.new(0, 205, 0, 40)
+Spawnin.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+Spawnin.ImageTransparency = 0.999
 
 a2concept.Name = "a2 concept"
 a2concept.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
@@ -146,9 +164,20 @@ Deploy.Name = "Deploy"
 Deploy.Parent = a2concept
 Deploy.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Deploy.BackgroundTransparency = 1.000
-Deploy.Position = UDim2.new(-0.0553786606, 0, 0, 0)
+Deploy.Position = UDim2.new(-0.0508213677, 0, 0, 0)
 Deploy.Size = UDim2.new(0, 1538, 0, 796)
+Deploy.ZIndex = 500
 Deploy.Image = "http://www.roblox.com/asset/?id=10856610713"
+
+TeamSelectToggle.Name = "TeamSelectToggle"
+TeamSelectToggle.Parent = Deploy
+TeamSelectToggle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TeamSelectToggle.BackgroundTransparency = 0.999
+TeamSelectToggle.Position = UDim2.new(0.401503891, 0, 0.865552843, 0)
+TeamSelectToggle.Size = UDim2.new(0, 399, 0, 82)
+TeamSelectToggle.ZIndex = 501
+TeamSelectToggle.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+TeamSelectToggle.ImageTransparency = 0.999
 
 Stats.Name = "Stats"
 Stats.Parent = a2concept
@@ -165,7 +194,7 @@ statuser.BackgroundTransparency = 1.000
 statuser.Position = UDim2.new(0.0439924486, 0, 0.885325134, 0)
 statuser.Size = UDim2.new(0, 234, 0, 30)
 statuser.Font = Enum.Font.GothamBold
-statuser.Text = "nil"
+statuser.Text = "SuperNormalBean"
 statuser.TextColor3 = Color3.fromRGB(255, 255, 255)
 statuser.TextScaled = true
 statuser.TextSize = 14.000
@@ -187,13 +216,13 @@ Contracts.Position = UDim2.new(-4.01213765e-05, 0, 0.0565724969, 0)
 Contracts.Size = UDim2.new(0, 1538, 0, 796)
 Contracts.Image = "http://www.roblox.com/asset/?id=10856610078"
 
-Delinquent.Name = "Delinquent"
-Delinquent.Parent = a2concept
-Delinquent.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Delinquent.BackgroundTransparency = 1.000
-Delinquent.Position = UDim2.new(-0.0176182464, 0, -0.0482527912, 0)
-Delinquent.Size = UDim2.new(0, 1538, 0, 796)
-Delinquent.Image = "http://www.roblox.com/asset/?id=10856542394"
+Delinquent_2.Name = "Delinquent"
+Delinquent_2.Parent = a2concept
+Delinquent_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Delinquent_2.BackgroundTransparency = 1.000
+Delinquent_2.Position = UDim2.new(-0.0176182464, 0, -0.0482527912, 0)
+Delinquent_2.Size = UDim2.new(0, 1538, 0, 796)
+Delinquent_2.Image = "http://www.roblox.com/asset/?id=10856542394"
 
 pcodestrans.Name = "pcodes trans"
 pcodestrans.Parent = a2concept
@@ -239,20 +268,20 @@ PlayerImage.BackgroundTransparency = 1.000
 PlayerImage.Position = UDim2.new(0.310143054, 0, 0.18216081, 0)
 PlayerImage.Size = UDim2.new(0, 71, 0, 67)
 PlayerImage.ZIndex = 4
-PlayerImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+PlayerImage.Image = "rbxthumb://type=AvatarHeadShot&id=2852499122&w=420&h=420"
 
-TextLabel_2.Parent = Profile
-TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_2.BackgroundTransparency = 1.000
-TextLabel_2.Position = UDim2.new(0.364759445, 0, 0.18216081, 0)
-TextLabel_2.Size = UDim2.new(0, 609, 0, 20)
-TextLabel_2.ZIndex = 4
-TextLabel_2.Font = Enum.Font.GothamBold
-TextLabel_2.Text = "nil"
-TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_2.TextScaled = true
-TextLabel_2.TextSize = 14.000
-TextLabel_2.TextWrapped = true
+TextLabel.Parent = Profile
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.364759445, 0, 0.18216081, 0)
+TextLabel.Size = UDim2.new(0, 609, 0, 20)
+TextLabel.ZIndex = 4
+TextLabel.Font = Enum.Font.GothamBold
+TextLabel.Text = "SuperNormalBean | Level: 999,999,999 | First Played: 00/00/00"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextScaled = true
+TextLabel.TextSize = 14.000
+TextLabel.TextWrapped = true
 
 Badges.Name = "Badges"
 Badges.Parent = Profile
@@ -268,9 +297,9 @@ ProfileSelect.Name = "Profile Select"
 ProfileSelect.Parent = a2concept
 ProfileSelect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ProfileSelect.BackgroundTransparency = 0.999
-ProfileSelect.Position = UDim2.new(0.75, 0, 0, 0)
+ProfileSelect.Position = UDim2.new(0.757161438, 0, -0.00166389346, 0)
 ProfileSelect.Size = UDim2.new(0, 166, 0, 65)
-ProfileSelect.ZIndex = 5
+ProfileSelect.ZIndex = 600
 ProfileSelect.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 ProfileSelect.ImageTransparency = 0.999
 
@@ -278,7 +307,7 @@ Codesmenu.Name = "Codes menu"
 Codesmenu.Parent = a2concept
 Codesmenu.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Codesmenu.BackgroundTransparency = 1.000
-Codesmenu.Position = UDim2.new(0.0754806995, 0, -0.00166386366, 0)
+Codesmenu.Position = UDim2.new(0.0754806995, 0, -0.0482528806, 0)
 Codesmenu.Selectable = true
 Codesmenu.Size = UDim2.new(0, 1230, 0, 706)
 Codesmenu.Visible = false
@@ -299,19 +328,6 @@ codestext.TextScaled = true
 codestext.TextSize = 14.000
 codestext.TextWrapped = true
 
-TextLabel_3.Parent = Codesmenu
-TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_3.BackgroundTransparency = 1.000
-TextLabel_3.Position = UDim2.new(0.626743555, 0, 0.835479558, 0)
-TextLabel_3.Size = UDim2.new(0, 200, 0, 50)
-TextLabel_3.ZIndex = 5
-TextLabel_3.Font = Enum.Font.GothamBold
-TextLabel_3.Text = "Redeem"
-TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextLabel_3.TextScaled = true
-TextLabel_3.TextSize = 14.000
-TextLabel_3.TextWrapped = true
-
 Back_2.Name = "Back"
 Back_2.Parent = Codesmenu
 Back_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -321,6 +337,20 @@ Back_2.Size = UDim2.new(0, 100, 0, 43)
 Back_2.ZIndex = 5
 Back_2.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 Back_2.ImageTransparency = 0.999
+
+Redeem.Name = "Redeem"
+Redeem.Parent = Codesmenu
+Redeem.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Redeem.BackgroundTransparency = 1.000
+Redeem.Position = UDim2.new(0.597881675, 0, 0.834631205, 0)
+Redeem.Size = UDim2.new(0, 275, 0, 50)
+Redeem.ZIndex = 5
+Redeem.Font = Enum.Font.GothamBold
+Redeem.Text = "Redeem"
+Redeem.TextColor3 = Color3.fromRGB(255, 255, 255)
+Redeem.TextScaled = true
+Redeem.TextSize = 14.000
+Redeem.TextWrapped = true
 
 LockerSelect.Name = "Locker Select"
 LockerSelect.Parent = a2concept
@@ -351,17 +381,317 @@ Profile_2.ZIndex = 11
 Profile_2.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
 Profile_2.ImageTransparency = 0.999
 
+ShopSelect.Name = "Shop Select"
+ShopSelect.Parent = a2concept
+ShopSelect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ShopSelect.BackgroundTransparency = 0.999
+ShopSelect.Position = UDim2.new(0.595052063, 0, -0.00166389346, 0)
+ShopSelect.Size = UDim2.new(0, 166, 0, 65)
+ShopSelect.ZIndex = 600
+ShopSelect.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+ShopSelect.ImageTransparency = 0.999
+
+Locker.Name = "Locker"
+Locker.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Locker.Enabled = false
+Locker.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+LockerMain.Name = "LockerMain"
+LockerMain.Parent = Locker
+LockerMain.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+LockerMain.BackgroundTransparency = 1.000
+LockerMain.Position = UDim2.new(-0.00911457371, 0, -0.00166389346, 0)
+LockerMain.Size = UDim2.new(0, 1559, 0, 865)
+LockerMain.Image = "http://www.roblox.com/asset/?id=10865228764"
+
+Melee.Name = "Melee"
+Melee.Parent = LockerMain
+Melee.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Melee.BackgroundTransparency = 1.000
+Melee.Position = UDim2.new(0.134701729, 0, 0.124855489, 0)
+Melee.Size = UDim2.new(0, 132, 0, 169)
+Melee.ZIndex = 5
+Melee.Image = "rbxassetid://2901423973"
+
+KillEffect.Name = "KillEffect"
+KillEffect.Parent = LockerMain
+KillEffect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+KillEffect.BackgroundTransparency = 1.000
+KillEffect.Position = UDim2.new(0.246311724, 0, 0.124855489, 0)
+KillEffect.Size = UDim2.new(0, 132, 0, 169)
+KillEffect.ZIndex = 5
+KillEffect.Image = "rbxassetid://3230504508"
+
+Announcer.Name = "Announcer"
+Announcer.Parent = LockerMain
+Announcer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Announcer.BackgroundTransparency = 1.000
+Announcer.Position = UDim2.new(0.359846056, 0, 0.124855489, 0)
+Announcer.Size = UDim2.new(0, 132, 0, 169)
+Announcer.ZIndex = 5
+Announcer.Image = "rbxassetid://2736712348"
+
+MenuSelect_2.Name = "Menu Select"
+MenuSelect_2.Parent = LockerMain
+MenuSelect_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+MenuSelect_2.BackgroundTransparency = 0.999
+MenuSelect_2.Position = UDim2.new(0.281659663, 0, 0.00115606934, 0)
+MenuSelect_2.Size = UDim2.new(0, 162, 0, 63)
+MenuSelect_2.ZIndex = 4
+MenuSelect_2.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+MenuSelect_2.ImageTransparency = 0.999
+
 -- Scripts:
 
-local function ODYQ_fake_script() -- Credits.LocalScript 
-	local script = Instance.new('LocalScript', Credits)
+local function ROKLDMP_fake_script() -- MenuSelect.LocalScript 
+	local script = Instance.new('LocalScript', MenuSelect)
 
-	wait(2)
-	game.Players.LocalPlayer.PlayerGui.Credits.Enabled = false
-	game.Players.LocalPlayer.PlayerGui["a2 concept"].Enabled = true
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Parent.Enabled = false
+		script.Parent.Parent.Parent.Parent["a2 concept"].Enabled = true
+	end)
 end
-coroutine.wrap(ODYQ_fake_script)()
-local function HXCPJB_fake_script() -- LockerMain.AddImages 
+coroutine.wrap(ROKLDMP_fake_script)()
+local function VHAGVJM_fake_script() -- username.LocalScript 
+	local script = Instance.new('LocalScript', username)
+
+	script.Parent.Text = game.Players.LocalPlayer.Name
+end
+coroutine.wrap(VHAGVJM_fake_script)()
+local function WQGYXXR_fake_script() -- MainMenu.LocalScript 
+	local script = Instance.new('LocalScript', MainMenu)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.Parent.Enabled = false
+		script.Parent.Parent.Parent.Parent["a2 concept"].Enabled = true
+	end)
+end
+coroutine.wrap(WQGYXXR_fake_script)()
+local function NUABI_fake_script() -- Spawnin.LocalScript 
+	local script = Instance.new('LocalScript', Spawnin)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		game.Players.LocalPlayer.PlayerGui.GUI.TeamSelection.Visible = true
+		script.Parent.Parent.Parent.Enabled = false
+		game.Players.LocalPlayer.PlayerGui.Menew.Enabled = true
+	end)
+end
+coroutine.wrap(NUABI_fake_script)()
+local function RDJCQ_fake_script() -- TeamSelectToggle.LocalScript 
+	local script = Instance.new('LocalScript', TeamSelectToggle)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.Parent.Enabled = false
+		script.Parent.Parent.Parent.Parent.TeamSelect.Enabled = true
+	end)
+end
+coroutine.wrap(RDJCQ_fake_script)()
+local function ISIDZIP_fake_script() -- statuser.LocalScript 
+	local script = Instance.new('LocalScript', statuser)
+
+	script.Parent.Text = game.Players.LocalPlayer.Name
+end
+coroutine.wrap(ISIDZIP_fake_script)()
+local function PRGKC_fake_script() -- twittercode.LocalScript 
+	local script = Instance.new('LocalScript', twittercode)
+
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent["Codes menu"].Visible = true
+		script.Parent.Parent["pcodes trans"].Visible = true
+		print("remove if its working")
+	end)
+end
+coroutine.wrap(PRGKC_fake_script)()
+local function MNKC_fake_script() -- Back.LocalScript 
+	local script = Instance.new('LocalScript', Back)
+
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Visible = false
+		script.Parent.Parent.Parent["pcodes trans"].Visible = false
+		script.Parent.Parent.Parent.mselect.Visible = true
+		script.Parent.Parent.Parent.pselect.Visible = false
+	end)
+end
+coroutine.wrap(MNKC_fake_script)()
+local function CAUKDLT_fake_script() -- TextLabel.LocalScript 
+	local script = Instance.new('LocalScript', TextLabel)
+
+	script.Parent.Text = game.Players.LocalPlayer.Name.." | Level: 999,999,999 | First Played: 00/00/00"
+end
+coroutine.wrap(CAUKDLT_fake_script)()
+local function RCXLJTX_fake_script() -- Badges.LocalScript 
+	local script = Instance.new('LocalScript', Badges)
+
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Parent.Badges.Visible = true
+		script.Parent.Parent.Visible = false
+	end)
+end
+coroutine.wrap(RCXLJTX_fake_script)()
+local function ZYNMAPZ_fake_script() -- Profile.LocalScript 
+	local script = Instance.new('LocalScript', Profile)
+
+	local frame = script.Parent
+	local player = game.Players.LocalPlayer
+	local userId = player.UserId
+	local thumbType = Enum.ThumbnailType.HeadShot
+	local thumbSize = Enum.ThumbnailSize.Size420x420
+	local content, isReady = game.Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+	
+	frame.PlayerImage.Image = content
+end
+coroutine.wrap(ZYNMAPZ_fake_script)()
+local function DQQQGE_fake_script() -- ProfileSelect.LocalScript 
+	local script = Instance.new('LocalScript', ProfileSelect)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		game.Players.LocalPlayer.PlayerGui["a2 concept"].Profile.Visible = true
+		print("delete if working")
+	end)
+end
+coroutine.wrap(DQQQGE_fake_script)()
+local function PJNNCRC_fake_script() -- Back_2.LocalScript 
+	local script = Instance.new('LocalScript', Back_2)
+
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Visible = false
+		script.Parent.Parent.Parent["pcodes trans"].Visible = false
+		script.Parent.Parent.Parent.mselect.Visible = true
+		script.Parent.Parent.Parent.pselect.Visible = false
+	end)
+end
+coroutine.wrap(PJNNCRC_fake_script)()
+local function LYPH_fake_script() -- Redeem.Redeem 
+	local script = Instance.new('LocalScript', Redeem)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Text = "Code Redeemed!"
+		wait("2")
+		script.Parent.Text = "Redeem"
+		if script.Parent.Parent.codestext.Text == "Pog" then
+			local args = {
+				[1] = "Pog"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "BLOXY" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "BLOXY"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "xonae" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "xonae"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "EPRIKA" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "EPRIKA"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "JOHN" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "JOHN"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "KITTEN" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "KITTEN"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "GARCELLO" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "GARCELLO"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "Anna" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "ANNA"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		elseif script.Parent.Parent.codestext.Text == "goodnight" then
+			script.Parent.Text = "Code Redeemed!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+			local args = {
+				[1] = "goodnight"
+			}
+	
+			game:GetService("ReplicatedStorage").Redeem:InvokeServer(unpack(args))
+		else
+			script.Parent.Text = "Invalid Code!"
+			wait("2")
+			script.Parent.Text = "Redeem"
+		end
+	end)
+end
+coroutine.wrap(LYPH_fake_script)()
+local function ALUEHAB_fake_script() -- LockerSelect.LocalScript 
+	local script = Instance.new('LocalScript', LockerSelect)
+
+	game.Players.LocalPlayer.PlayerGui["a2 concept"]["Locker Select"].MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Enabled = false
+		script.Parent.Parent.Parent.Locker.Enabled = true
+	end)
+end
+coroutine.wrap(ALUEHAB_fake_script)()
+local function IGRTGW_fake_script() -- Profile_2.LocalScript 
+	local script = Instance.new('LocalScript', Profile_2)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent.Visible = false
+		script.Parent.Parent.Parent.Profile.Visible = true
+	end)
+end
+coroutine.wrap(IGRTGW_fake_script)()
+local function EWCS_fake_script() -- ShopSelect.LocalScript 
+	local script = Instance.new('LocalScript', ShopSelect)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		game.Players.LocalPlayer.PlayerGui["a2 concept"].Enabled = false
+		game.Players.LocalPlayer.PlayerGui.Store.Enabled = true
+		print("delete if working")
+	end)
+end
+coroutine.wrap(EWCS_fake_script)()
+local function THUIC_fake_script() -- MenuSelect_2.LocalScript 
+	local script = Instance.new('LocalScript', MenuSelect_2)
+
+	script.Parent.MouseButton1Click:Connect(function ()
+		script.Parent.Parent.Parent.Enabled = false
+		script.Parent.Parent.Parent.Parent["a2 concept"].Enabled = true
+	end)
+end
+coroutine.wrap(THUIC_fake_script)()
+local function OHVNYYC_fake_script() -- LockerMain.LocalScript 
 	local script = Instance.new('LocalScript', LockerMain)
 
 	local Knife1 = game.Players.LocalPlayer.PlayerGui.Menew.Locker.Slots.Melees.Item.Image
@@ -374,129 +704,4 @@ local function HXCPJB_fake_script() -- LockerMain.AddImages
 	Locker.KillEffect.Image = KillEffect1
 	Locker.Melee.Image = Knife1
 end
-coroutine.wrap(HXCPJB_fake_script)()
-local function HKYRGY_fake_script() -- MenuSelect.LocalScript 
-	local script = Instance.new('LocalScript', MenuSelect)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Parent.Enabled = false
-		script.Parent.Parent.Parent.Parent["a2 concept"].Enabled = true
-	end)
-	
-	-- I just re used code lets go
-end
-coroutine.wrap(HKYRGY_fake_script)()
-local function VIXAVXC_fake_script() -- mselect.LocalScript 
-	local script = Instance.new('LocalScript', mselect)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Visible = false
-		script.Parent.Parent.pselect.Visible = true
-	end)
-end
-coroutine.wrap(VIXAVXC_fake_script)()
-local function VEERZU_fake_script() -- pselect.LocalScript 
-	local script = Instance.new('LocalScript', pselect)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Visible = false
-		script.Parent.Parent.mselect.Visible = true
-	end)
-end
-coroutine.wrap(VEERZU_fake_script)()
-local function TPGLJA_fake_script() -- statuser.LocalScript 
-	local script = Instance.new('LocalScript', statuser)
-
-	script.Parent.Text = game.Players.LocalPlayer.Name
-end
-coroutine.wrap(TPGLJA_fake_script)()
-local function HSVZNII_fake_script() -- twittercode.LocalScript 
-	local script = Instance.new('LocalScript', twittercode)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent["Codes menu"].Visible = true
-		script.Parent.Parent["pcodes trans"].Visible = true
-		print("remove if its working")
-	end)
-end
-coroutine.wrap(HSVZNII_fake_script)()
-local function EEHVQ_fake_script() -- Back.LocalScript 
-	local script = Instance.new('LocalScript', Back)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Visible = false
-		script.Parent.Parent.Parent["pcodes trans"].Visible = false
-		script.Parent.Parent.Parent.mselect.Visible = true
-		script.Parent.Parent.Parent.pselect.Visible = false
-	end)
-	
-	
-end
-coroutine.wrap(EEHVQ_fake_script)()
-local function AUPBG_fake_script() -- Profile.profile 
-	local script = Instance.new('LocalScript', Profile)
-
-	local frame = script.Parent
-	local player = game.Players.LocalPlayer
-	local userId = player.UserId
-	local thumbType = Enum.ThumbnailType.HeadShot
-	local thumbSize = Enum.ThumbnailSize.Size420x420
-	local content, isReady = game.Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
-	
-	frame.PlayerImage.Image = content
-end
-coroutine.wrap(AUPBG_fake_script)()
-local function BKZCB_fake_script() -- TextLabel_2.LocalScript 
-	local script = Instance.new('LocalScript', TextLabel_2)
-
-	script.Parent.Text = game.Players.LocalPlayer.Name.." | Level: 999,999,999 | First Played: 00/00/00"
-end
-coroutine.wrap(BKZCB_fake_script)()
-local function OAGCEF_fake_script() -- Badges.LocalScript 
-	local script = Instance.new('LocalScript', Badges)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Parent.Badges.Visible = true
-		script.Parent.Parent.Visible = false
-	end)
-end
-coroutine.wrap(OAGCEF_fake_script)()
-local function MJTQ_fake_script() -- ProfileSelect.LocalScript 
-	local script = Instance.new('LocalScript', ProfileSelect)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent["pcodes trans"].Visible = true
-		script.Parent.Parent.Profile.Visible = true
-		script.Parent.Parent.pselect.Visible = true
-		script.Parent.Parent.mselect.Visible = false
-	end)
-end
-coroutine.wrap(MJTQ_fake_script)()
-local function CYESN_fake_script() -- Back_2.LocalScript 
-	local script = Instance.new('LocalScript', Back_2)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Parent["pcodes trans"].Visible = false
-		script.Parent.Parent.Parent["Codes menu"].Visible = false
-	end)
-	
-end
-coroutine.wrap(CYESN_fake_script)()
-local function INZIK_fake_script() -- LockerSelect.LocalScript 
-	local script = Instance.new('LocalScript', LockerSelect)
-
-	game.Players.LocalPlayer.PlayerGui["a2 concept"]["Locker Select"].MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Enabled = false
-		script.Parent.Parent.Parent.Locker.Enabled = true
-	end)
-end
-coroutine.wrap(INZIK_fake_script)()
-local function FVAQFNK_fake_script() -- Profile_2.LocalScript 
-	local script = Instance.new('LocalScript', Profile_2)
-
-	script.Parent.MouseButton1Click:Connect(function ()
-		script.Parent.Parent.Parent.Profile.Visible = true
-		script.Parent.Parent.Visible = false
-	end)
-end
-coroutine.wrap(FVAQFNK_fake_script)()
+coroutine.wrap(OHVNYYC_fake_script)()
