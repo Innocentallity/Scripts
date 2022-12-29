@@ -1,0 +1,42 @@
+-- hi skiddo whats up?
+local UILibrary = loadstring(game:HttpGet("https://pastebin.com/raw/V1ca2q9s"))()
+
+local MainUI = UILibrary.Load("InnoHub - FATE")
+
+local FirstPage = MainUI.AddPage("Main")
+local SecondPage = MainUI.AddPage("Extras")
+
+local FirstButton = FirstPage.AddButton("Teleport To Cube", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-499.181732, 3.89548016, -499.146454, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+end)
+
+local SecondButton = FirstPage.AddButton("Infinite Ammo, Firerate", function()
+   game:GetService('RunService').Stepped:connect(function()
+        game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount.Value = 999
+    game:GetService("Players").LocalPlayer.PlayerGui.GUI.Client.Variables.ammocount2.Value = 999
+end)
+
+for i,v in next, game.ReplicatedStorage.Weapons:GetChildren() do
+    for i,c in next, v:GetChildren() do 
+    for i,x in next, getconnections(c.Changed) do
+        x:Disable()
+end
+if c.Name == "Ammo" or c.Name == "StoredAmmo" then
+    c.Value = 300
+    elseif c.Name == "AReload" or c.Name == "RecoilControl" or c.Name == "EReload" or c.Name == "SReload" or c.Name == "ReloadTime" or c.Name == "EquipTime" or c.Name == "Spread" or c.Name == "MaxSpread" then
+c.Value = 0
+        elseif c.Name == "Range" then
+c.Value = 9e9
+elseif c.Name == "Auto" then
+                    c.Value = true
+    elseif c.Name == "FireRate" or c.Name == "BFireRate" then
+c.Value = 0.02
+            end
+        end
+    end
+end)
+
+
+local ThirdButton = SecondPage.AddButton("Night's Edge", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Innocentallity/Scripts/main/Autovent"))()
+end)
