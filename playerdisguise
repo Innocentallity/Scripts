@@ -1,0 +1,181 @@
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
+local player = Players.LocalPlayer
+local isActive = false
+local isProcessing = false 
+
+-- Identity Constants
+local ORIGINAL_USER = player.Name
+local ORIGINAL_DISPLAY = player.DisplayName
+local SPOOF_USER = "UnknownEntity"
+local SPOOF_DISPLAY = "???"
+
+-- Tables for Tracking
+local uiConnections = {} 
+local uiMemory = {}
+local boxes = {}
+local originalFace = ""
+
+-- Create Physical Vault for Accessories
+local accessoryVault = ReplicatedStorage:FindFirstChild(player.Name .. "_Vault") or Instance.new("Folder")
+accessoryVault.Name = player.Name .. "_Vault"
+accessoryVault.Parent = ReplicatedStorage
+
+---------------------------
+-- UI SPOOFING LOGIC
+---------------------------
+
+local function processUI(instance)
+    if not (instance:IsA("TextLabel") or instance:IsA("TextButton") or instance:IsA("TextBox")) then return end
+    
+    local success, currentText = pcall(function() return instance.Text end)
+    if not success or not currentText then return end
+
+    if not uiMemory[instance] then uiMemory[instance] = currentText end
+
+    if isActive then
+        local baseText = instance.Text
+        if baseText:find(ORIGINAL_DISPLAY) or baseText:find(ORIGINAL_USER) then
+            local newText = baseText:gsub(ORIGINAL_DISPLAY, SPOOF_DISPLAY):gsub(ORIGINAL_USER, SPOOF_USER)
+            
+            if instance.Text ~= newText then
+                if uiConnections[instance] then uiConnections[instance]:Disconnect() end
+                instance.Text = newText
+                
+                uiConnections[instance] = instance:GetPropertyChangedSignal("Text"):Connect(function()
+                    if isActive then
+                        local updatedText = instance.Text
+                        if updatedText:find(ORIGINAL_DISPLAY) or updatedText:find(ORIGINAL_USER) then
+                            instance.Text = updatedText:gsub(ORIGINAL_DISPLAY, SPOOF_DISPLAY):gsub(ORIGINAL_USER, SPOOF_USER)
+                        end
+                    end
+                end)
+            end
+        end
+    else
+        if uiConnections[instance] then 
+            uiConnections[instance]:Disconnect() 
+            uiConnections[instance] = nil
+        end
+        if uiMemory[instance] and instance.Text ~= uiMemory[instance] then 
+            instance.Text = uiMemory[instance] 
+        end
+    end
+end
+
+local function startWatching(parent)
+    parent.DescendantAdded:Connect(processUI)
+    for _, item in ipairs(parent:GetDescendants()) do processUI(item) end
+end
+
+---------------------------
+-- PHYSICAL HIDER LOGIC
+---------------------------
+
+local function togglePhysical(character, hide)
+    if not character then return end
+
+    if hide then
+        -- 1. Store Accessories
+        for _, item in pairs(character:GetChildren()) do
+            if item:IsA("Accessory") then item.Parent = accessoryVault end
+        end
+
+        -- 2. Blank the Face
+        local head = character:FindFirstChild("Head")
+        if head then
+            local decal = head:FindFirstChildOfClass("Decal")
+            if decal then
+                originalFace = decal.Texture
+                decal.Texture = ""
+            end
+        end
+
+        -- 3. Box Limbs (Excluding HumanoidRootPart)
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                local box = Instance.new("Part")
+                box.Size = part.Size + Vector3.new(0.15, 0.15, 0.15)
+                box.Color = Color3.fromRGB(30, 30, 30)
+                box.Material = Enum.Material.SmoothPlastic
+                box.CanCollide = false
+                box.Name = "HiderBox"
+                
+                local weld = Instance.new("WeldConstraint")
+                box.CFrame = part.CFrame
+                box.Parent = character
+                weld.Part0 = box
+                weld.Part1 = part
+                weld.Parent = box
+                
+                table.insert(boxes, box)
+                part.Transparency = 1
+            end
+        end
+    else
+        -- REVERT PHYSICAL
+        for _, item in pairs(accessoryVault:GetChildren()) do item.Parent = character end
+        
+        local head = character:FindFirstChild("Head")
+        if head and head:FindFirstChildOfClass("Decal") then
+            head:FindFirstChildOfClass("Decal").Texture = originalFace
+        end
+
+        for _, box in pairs(boxes) do if box then box:Destroy() end end
+        boxes = {}
+
+        for _, part in pairs(character:GetChildren()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.Transparency = 0
+            end
+        end
+    end
+end
+
+---------------------------
+-- MAIN TOGGLE
+---------------------------
+
+local function toggleMaster()
+    isActive = not isActive
+    local char = player.Character
+
+    -- Toggle Name/UI
+    if char and char:FindFirstChildOfClass("Humanoid") then
+        char:FindFirstChildOfClass("Humanoid").DisplayName = isActive and SPOOF_DISPLAY or ORIGINAL_DISPLAY
+    end
+
+    for _, item in ipairs(player.PlayerGui:GetDescendants()) do processUI(item) end
+    for _, item in ipairs(CoreGui:GetDescendants()) do processUI(item) end
+
+    -- Toggle Body
+    togglePhysical(char, isActive)
+end
+
+-- Initialize Watchers
+startWatching(player.PlayerGui)
+startWatching(CoreGui)
+
+player.CharacterAdded:Connect(function(char)
+    if isActive then
+        task.wait(0.1)
+        local hum = char:WaitForChild("Humanoid", 5)
+        if hum then hum.DisplayName = SPOOF_DISPLAY end
+        togglePhysical(char, true)
+    end
+    startWatching(char)
+end)
+
+-- Hotkey Setup
+UserInputService.InputBegan:Connect(function(input, gpe)
+    if gpe or isProcessing then return end
+    if input.KeyCode == Enum.KeyCode.H then
+        isProcessing = true
+        toggleMaster()
+        task.wait(0.5)
+        isProcessing = false
+    end
+end)
