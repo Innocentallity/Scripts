@@ -19,6 +19,20 @@ local uiMemory = {}
 local boxes = {}
 local originalFace = ""
 
+-- R6 & R15 Whitelisted Body Parts (Excludes HumanoidRootPart and extra character parts)
+local VALID_LIMBS = {
+    -- R6
+    ["Head"] = true, ["Torso"] = true,
+    ["Left Arm"] = true, ["Right Arm"] = true,
+    ["Left Leg"] = true, ["Right Leg"] = true,
+    -- R15
+    ["UpperTorso"] = true, ["LowerTorso"] = true,
+    ["LeftUpperArm"] = true, ["LeftLowerArm"] = true, ["LeftHand"] = true,
+    ["RightUpperArm"] = true, ["RightLowerArm"] = true, ["RightHand"] = true,
+    ["LeftUpperLeg"] = true, ["LeftLowerLeg"] = true, ["LeftFoot"] = true,
+    ["RightUpperLeg"] = true, ["RightLowerLeg"] = true, ["RightFoot"] = true
+}
+
 -- Create Physical Vault for Accessories
 local accessoryVault = ReplicatedStorage:FindFirstChild(player.Name .. "_Vault") or Instance.new("Folder")
 accessoryVault.Name = player.Name .. "_Vault"
@@ -94,9 +108,9 @@ local function togglePhysical(character, hide)
             end
         end
 
-        -- 3. Box Limbs (Excluding HumanoidRootPart)
+        -- 3. Box Limbs (Only Whitelisted Limbs)
         for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            if part:IsA("BasePart") and VALID_LIMBS[part.Name] then
                 local box = Instance.new("Part")
                 box.Size = part.Size + Vector3.new(0.15, 0.15, 0.15)
                 box.Color = Color3.fromRGB(30, 30, 30)
@@ -128,7 +142,7 @@ local function togglePhysical(character, hide)
         boxes = {}
 
         for _, part in pairs(character:GetChildren()) do
-            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+            if part:IsA("BasePart") and VALID_LIMBS[part.Name] then
                 part.Transparency = 0
             end
         end
