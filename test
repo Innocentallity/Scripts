@@ -1,0 +1,3863 @@
+game.Players.PlayerAdded:Connect(function(plr)
+	plr:LoadCharacter()
+	local a2 = Instance.new("Folder")
+	a2.Name = "Cooldowns"
+	a2.Parent = plr
+	local a = Instance.new("StringValue")
+	a.Name = "CurrentForm"
+	a.Value = "BASE"
+	a.Parent = plr
+	local HP = Instance.new("NumberValue")
+	HP.Name = "HP"
+	HP.Value = 1500
+	HP.Parent = plr
+	local PL = Instance.new("NumberValue")
+	PL.Name = "PL"
+	PL.Value = 5
+	PL.Parent = plr
+	local UIOB = Instance.new("BoolValue")
+	UIOB.Name = "ObtainedUI"
+	UIOB.Parent = plr
+	local Data = game:GetService("DataStoreService"):GetDataStore("MainData")
+	local data = Data:GetAsync(plr.UserId)
+	if data then
+		pcall(function()
+			HP.Value = data[1]
+			PL.Value = data[2]
+			UIOB.Value = data[3]
+		end)
+		repeat
+			game:GetService("RunService").Heartbeat:Wait()
+		until plr.Character
+		plr.Character.Humanoid.MaxHealth = HP.Value
+		plr.Character.Humanoid.Health = HP.Value
+	end
+	plr.CharacterAdded:Connect(function()
+		for i,v in pairs(plr.Cooldowns:GetChildren()) do
+			v:Destroy()
+		end
+		plr.CurrentForm.Value = "BASE"
+		plr.Character:WaitForChild("Humanoid").MaxHealth = HP.Value
+		plr.Character:WaitForChild("Humanoid").Health = HP.Value
+	end)
+end)
+
+game.Players.PlayerRemoving:Connect(function(plr)
+	local Data = game:GetService("DataStoreService"):GetDataStore("MainData")
+	Data:SetAsync(plr.UserId,{plr.HP.Value,plr.PL.Value,plr.ObtainedUI.Value})
+end)
+local PhysicsService = game:GetService("PhysicsService")
+local playerCollisionGroupName = "Players"
+PhysicsService:CreateCollisionGroup("Players")
+PhysicsService:CreateCollisionGroup("MiscBots")
+PhysicsService:CollisionGroupSetCollidable(playerCollisionGroupName, "MiscBots", false)
+
+game.ReplicatedStorage.Moves.OnServerInvoke = function(plr,Move)
+	if plr.Cooldowns:FindFirstChild(Move) then
+		print(plr.Name.." got kicked for removing cooldowns.")
+		plr:Kick("No cooldowns")
+	end
+	local MoveIsInThere = false
+	for i,v in pairs(plr.PlayerGui.HUD.FormMoves[plr.CurrentForm.Value]:GetChildren()) do
+		if v.Value == Move then
+			MoveIsInThere = true
+			local Cooldown = Instance.new("BoolValue")
+			Cooldown.Name = Move
+			Cooldown.Parent = plr.Cooldowns
+			game:GetService("Debris"):AddItem(Cooldown,v.Cooldown.Value)
+		elseif Move == "M1" or Move == "Ultra Instinct" or Move == "SSJ" or Move == "SSJ2" or Move == "SSJG" or Move == "SSJB" or Move == "Meditate" then
+			MoveIsInThere = true
+		end
+	end
+	if MoveIsInThere == false then
+		print(plr.Name.." got kicked for swapping movesets.")
+		plr:Kick("Swapping movesets")
+	end
+
+	if Move == "Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.Character.Humanoid.AutoRotate = false
+			plr.PlayerGui.HUD.KiValue.Value -= 100
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10787892147"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10789113427"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = plr.Character.Torso
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,7.5)
+			local Part = Instance.new("Part")
+			Part.Shape = Enum.PartType.Ball
+			Part.Material = "Neon"
+			Part.Massless = true
+			Part.Color = Color3.fromRGB(4,175,236)
+			Part.CastShadow = false
+			Part.Size = Vector3.new(1.844, 1.844, 1.844)
+			Part.CanCollide = false
+			local Motor = Instance.new("Motor6D")
+			Motor.Part0 = Part
+			Motor.Part1 = plr.Character["Right Arm"]
+			Motor.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+			local Part2 = Part:Clone()
+			Motor.Parent = Part
+			-- Part2.Color = Color3.fromRGB(248, 248, 248)
+			Part2.Size = Vector3.new(1.614, 1.614, 1.614)
+			Part2.Parent = Part
+			Part.Transparency = 0.5
+			local Weld = Instance.new("Weld")
+			Weld.Part0 = Part
+			Weld.Part1 = Part2
+			Weld.Parent = Part2
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("Debris"):AddItem(Part,20)
+			game:GetService("Debris"):AddItem(Part2,20)
+			local Start = os.clock()
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			until os.clock() - Start >= 1.2 or plr.Character:FindFirstChild("Stun") or plr.Character.Humanoid.Health <= 0
+			if not plr.Character:FindFirstChild("Stun") then
+				local CameraShake = script.CameraShake:Clone()
+				CameraShake.Parent = plr.Character
+				Motor.Part0 = nil
+				Motor.Part1 = nil
+				Weld.Part0 = nil
+				Weld.Part1 = nil
+				Motor:Destroy()
+				Weld:Destroy()
+				Part.Size = Vector3.new(5,5,5)
+				Part2.Size = Vector3.new(4.5,4.5,4.5)
+				Part.Anchored = true
+				Part2.Anchored = true
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-3.687)
+				Part2.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-3.687)
+				local Part3 = Instance.new("Part")
+				Part3.Anchored = true
+				Part3.Transparency = 0.5
+				Part3.Shape = Enum.PartType.Cylinder
+				Part3.Material = "Neon"
+				Part3.Massless = true
+				Part3.Color = Color3.fromRGB(4,175,236)
+				Part3.CastShadow = false
+				Part3.Size = Vector3.new(4, 3.577, 3.57)
+				Part3.CanCollide = false
+				Part3.CFrame = Part.CFrame*CFrame.new(0,0,-1.5)*CFrame.Angles(0,math.rad(90),0)
+				local Part4 = Part3:Clone()
+				Part4.Transparency = 0
+				game:GetService("Debris"):AddItem(Part3,20)
+				game:GetService("Debris"):AddItem(Part4,20)
+				Part4.Size = Vector3.new(3.5,3.077,3.07)
+				Part4.Parent = workspace.MouseIgnore
+				Part3.Parent = workspace.MouseIgnore
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{Size=Vector3.new(400,3.577, 3.57)}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=Part3.CFrame*CFrame.new(200,0,0)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{Size=Vector3.new(399.5,3.077,3.07)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=Part4.CFrame*CFrame.new(200,0,0)}):Play()
+				spawn(function()
+					local Stot = os.clock()
+					repeat
+						game:GetService("RunService").Heartbeat:Wait()
+						local Hit = {}
+						for i,v in pairs(workspace:GetPartsInPart(Part3,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.8 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.1 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+							end
+						end
+						for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.8 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.1 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+							end
+						end
+					until os.clock() - Stot >= 2.3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				end)
+				local SPAT = os.clock()
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+				until os.clock() - SPAT >= 2.3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part2,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(0.2),{Transparency=1}):Play()
+				CameraShake:Destroy()
+				task.wait(0.2)
+				Part3:Destroy()
+				Part4:Destroy()
+			end
+			Part:Destroy()
+			Part2:Destroy()
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+			task.wait(0.1)
+			plr.Character.Humanoid.AutoRotate = true
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Ultra Instinct Sign" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		local Anim = Instance.new("Animation")
+		Anim.AnimationId = "rbxassetid://10952197306"
+		local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+		Anim:Play()
+		local Counter = Instance.new("StringValue")
+		Counter.Name = "Counter"
+		Counter.Value = "Ultra Instinct Sign"
+		Counter.Parent = plr.Character
+		local VFX = game.ReplicatedStorage.UIVFX:Clone()
+		VFX.Item.Value = nil
+		VFX.Color = Color3.fromRGB(0, 10, 70)
+		VFX.RootPart.Value = plr.Character.PrimaryPart
+		VFX.Parent = workspace.MouseIgnore
+		local Start = os.clock()
+		local Finished = false
+		Counter.Destroying:Connect(function()
+			Finished = true
+		end)
+		repeat
+			game:GetService("RunService").Heartbeat:Wait()
+		until os.clock() - Start >= 3 or Finished == true
+		Counter:Destroy()
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Instinctive Dodges" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.KiValue.Value -= 250
+		local Counter = Instance.new("StringValue")
+		Counter.Name = "Counter"
+		Counter.Value = "Instinctive Dodges"
+		local a = Instance.new("BoolValue")
+		a.Name = "ParentedToNothing"
+		a.Parent = Counter
+		Counter.Parent = plr.Character
+		local Start = os.clock()
+		local Stort = os.clock()
+		local Finished = false
+		local Time2 = 7.5
+		if plr.CurrentForm.Value == "MUI" then
+			Time2 = 15
+		end
+		plr.Character.Archivable = true
+		for i,v in pairs(game.Players:GetChildren()) do
+			local A = script.InstinctDodgesVFX:Clone()
+			A.Time.Value = Time2
+			A.Character.Value = plr.Character
+			A.Parent = v.PlayerGui
+		end
+		spawn(function()
+			local Time = Time2 - (os.clock() - Stort)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				if plr.PlayerGui.HUD.Busy.Value == false and a.Value == false then
+					if not plr.Character:FindFirstChild("Stun") or plr.Character:FindFirstChild("Stun") and plr.Character.Stun:FindFirstChild("UIStun") then
+						Counter.Parent = plr.Character
+					end
+				elseif plr.PlayerGui.HUD.Busy.Value == true or a.Value == true then
+					Counter.Parent = nil
+				end
+			until os.clock() - Start >= Time
+			Counter:Destroy()
+			Finished = true
+		end)
+	elseif Move == "Ki Blast" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 50
+		for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+			an:Stop()
+		end
+		local Anim = Instance.new("Animation")
+		Anim.AnimationId = "rbxassetid://10823841192"
+		local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+		Anim:Play()
+		local Sound2 = Instance.new("Sound")
+		Sound2.SoundId = "rbxassetid://11022704242"
+		Sound2.Volume = 3
+		Sound2.RollOffMaxDistance = 250
+		Sound2.Parent = plr.Character.Torso
+		Sound2:Play()
+		game:GetService("Debris"):AddItem(Sound2,7.5)
+		plr.Character.HumanoidRootPart.Anchored = true
+		plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+		local Finished = false
+		local Stunned = false
+		if plr.Character:FindFirstChild("Stun") then
+			Stunned = true
+		end
+		plr.Character.ChildAdded:Connect(function(Child)
+			if Child.Name == "Stun" then
+				Stunned = true
+			end
+		end)
+		spawn(function()
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			until Finished == true or Stunned == true
+		end)
+		plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+		local function Kiblast(LeftOrRight)
+			local Part = script.KiBlast:Clone()
+			Part.Name = "OtherKiBlast"
+			Part.Shape = "Ball"
+			Part.Size = Vector3.new(1.033,1.033, 1.033)
+			Part.Color = Color3.fromRGB(255,255,0)
+			Part.Material = "Neon"
+			Part.Anchored = true
+			Part.CanCollide = false
+			Part.Parent = workspace.MouseIgnore
+			if LeftOrRight == "Right" then
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.545,0.825,-2.338)
+			else
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.531,0.825,-2.338)
+			end
+			local Tween = game:GetService("TweenService"):Create(Part,TweenInfo.new(10,Enum.EasingStyle.Linear),{CFrame=Part.CFrame*CFrame.new(0,0,-975)})
+			Tween:Play()
+			spawn(function()
+				local CanTouchPart = true
+				spawn(function()
+					task.wait(9)
+					if CanTouchPart == true then
+						Part:Destroy()
+					end
+				end)
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					for i,hit in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						if CanTouchPart == true and hit.Name ~= "OtherKiBlast" then
+							if hit:IsA("Part") and not hit:IsDescendantOf(plr.Character) and hit.Transparency < 1 or hit:IsA("MeshPart") and not hit:IsDescendantOf(plr.Character) and hit.Transparency < 1 or hit:IsA("UnionOperation") and not hit:IsDescendantOf(plr.Character) and hit.Transparency < 1 then
+								CanTouchPart = false
+								Tween:Cancel()
+								Part.Size = Vector3.new(17.5,17.5,17.5)
+								Part.Transparency = 0.6
+								game:GetService("TweenService"):Create(Part,TweenInfo.new(0.25),{Transparency=0.3}):Play()
+								game:GetService("TweenService"):Create(Part,TweenInfo.new(0.25),{Size=Vector3.new(20,20,20)}):Play()
+								local HITBOXTIME = os.clock()
+								spawn(function()
+									local Hit = {}
+									repeat
+										game:GetService("RunService").Heartbeat:Wait()
+										for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+											if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+												table.insert(Hit,v.Parent)
+												if not v.Parent:FindFirstChild("Armor") then
+													v.Parent.Humanoid.Health -= 1.9 * plr.PL.Value * plr.Character.Multiplier.Value
+												else
+													v.Parent.Humanoid.Health -= 0.23 * plr.PL.Value * plr.Character.Multiplier.Value
+												end
+												v.Parent.LastHit.Value = plr
+											elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+												table.insert(Hit,v.Parent)
+												require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move,nil,LeftOrRight)
+											end
+										end
+									until os.clock() - HITBOXTIME >= 0.25
+								end)
+								task.wait(0.25)
+								game:GetService("TweenService"):Create(Part,TweenInfo.new(0.75),{Transparency=1}):Play()
+								spawn(function()
+									task.wait(0.75)
+									Part:Destroy()
+								end)
+							end
+						end
+					end
+				until Part.Parent == nil
+			end)
+		end
+		local Start = os.clock()
+		task.wait(0.05)
+		local a = "Right"
+		Kiblast(a)
+		a = "Left"
+		local Count = 1
+		while task.wait(0.117) do
+			if Stunned == false then
+				Kiblast(a)
+			end
+			Count += 1
+			if a == "Left" then
+				a = "Right"
+			else
+				a = "Left"
+			end
+			if Count >= 9 or Stunned == true then
+				break
+			end
+		end
+		task.wait(os.clock() - Start - 0.9)
+		Finished = true
+		plr.Character.HumanoidRootPart.Anchored = false
+		plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "M1" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PlayerGui.HUD.Combo.Value == 1 then
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://16791347701"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			task.wait(0.25)
+			local Part = Instance.new("Part")
+			Part.Anchored = true
+			Part.Size = Vector3.new(3.982, 5.925, 4.673)
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+			local Start = os.clock()
+			local Hit = {}
+			local Broke = false
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				if Broke == false and Stunned == false then
+					for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+							table.insert(Hit,v.Parent)
+							if not v.Parent:FindFirstChild("Armor") then
+								for i,x in pairs(v.Parent:GetChildren()) do
+									if x.Name == "Stun" then
+										x:Destroy()
+									end
+								end
+								local Stun = Instance.new("BoolValue")
+								Stun.Name = "Stun"
+								Stun.Parent = v.Parent
+								game:GetService("Debris"):AddItem(Stun,0.75)
+								for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+									an:Stop(0)
+								end
+								local Anim3 = Instance.new("Animation")
+								Anim3.AnimationId = "rbxassetid://16791357742"
+								local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+								Anim3:Play(0)
+							end
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.Humanoid.Health -= 4 * plr.PL.Value * plr.Character.Multiplier.Value
+							else
+								v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+							end
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191296"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							v.Parent.LastHit.Value = plr
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+								v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+							end
+							Broke = true
+							break
+						elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							table.insert(Hit,v.Parent)
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move,"First","Right")
+						end
+					end
+				end
+			until os.clock() - Start >= 0.1 or Stunned == true
+			if Stunned == false then
+				task.wait(0.2)
+			end
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+			local Start = os.clock()
+			local Hit = {}
+			local Found = false
+			local Broke = false
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				if Broke == false and Stunned == false then
+					for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+							table.insert(Hit,v.Parent)
+							if not v.Parent:FindFirstChild("Armor") then
+								for i,x in pairs(v.Parent:GetChildren()) do
+									if x.Name == "Stun" then
+										x:Destroy()
+									end
+								end
+								local Stun = Instance.new("BoolValue")
+								Stun.Name = "Stun"
+								Stun.Parent = v.Parent
+								game:GetService("Debris"):AddItem(Stun,0.75)
+								for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+									an:Stop(0)
+								end
+								local Anim3 = Instance.new("Animation")
+								Anim3.AnimationId = "rbxassetid://16791357742"
+								local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+								Anim3:Play(0)
+							end
+							Found = true
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.Humanoid.Health -= 4 * plr.PL.Value * plr.Character.Multiplier.Value
+							else
+								Found = false
+								v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+							end
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191296"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							v.Parent.LastHit.Value = plr
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+								v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+							end
+							Broke = true
+							break
+						elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							table.insert(Hit,v.Parent)
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move,"First","Left")
+						end
+					end
+				end
+			until os.clock() - Start >= 0.1 or Stunned == true
+			if Stunned == false then
+				task.wait(0.15)
+			end
+			if Found == true then
+				Anim:Play(0)
+				Anim:Stop(0)
+				local Anim2 = Instance.new("Animation")
+				Anim2.AnimationId = "rbxassetid://16791370635"
+				local Anim2 = plr.Character.Humanoid:LoadAnimation(Anim2)
+				Anim2:Play(0)
+				if Stunned == false then
+					task.wait(0.05)
+				end
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				local Start = os.clock()
+				local Hit = {}
+				local Found = false
+				local Broke = false
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+					if Broke == false and Stunned == false then
+						for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									for i,x in pairs(v.Parent:GetChildren()) do
+										if x.Name == "Stun" then
+											x:Destroy()
+										end
+									end
+									local Stun = Instance.new("BoolValue")
+									Stun.Name = "Stun"
+									Stun.Parent = v.Parent
+									game:GetService("Debris"):AddItem(Stun,0.75)
+									for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+										an:Stop(0)
+									end
+									local Anim3 = Instance.new("Animation")
+									Anim3.AnimationId = "rbxassetid://16791357742"
+									local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+									Anim3:Play(0)
+								end
+								Found = true
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 4 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								local Sound2 = Instance.new("Sound")
+								Sound2.SoundId = "rbxassetid://10972191296"
+								Sound2.Volume = 3
+								Sound2.RollOffMaxDistance = 250
+								Sound2.Parent = plr.Character.Torso
+								Sound2:Play()
+								game:GetService("Debris"):AddItem(Sound2,5)
+								v.Parent.LastHit.Value = plr
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+									v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+								end
+								Broke = true
+								break
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move,"First","Right")
+							end
+						end
+					end
+				until os.clock() - Start >= 0.1 or Stunned == true
+				if Stunned == false then
+					task.wait(0.2)
+				end
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				local Start = os.clock()
+				local Hit = {}
+				local Found = false
+				local Broke = false
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+					if Broke == false and Stunned == false then
+						for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									for i,x in pairs(v.Parent:GetChildren()) do
+										if x.Name == "Stun" then
+											x:Destroy()
+										end
+									end
+									local Stun = Instance.new("BoolValue")
+									Stun.Name = "Stun"
+									Stun.Parent = v.Parent
+									game:GetService("Debris"):AddItem(Stun,0.75)
+									for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+										an:Stop(0)
+									end
+									local Anim3 = Instance.new("Animation")
+									Anim3.AnimationId = "rbxassetid://10820982733"
+									local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+									Anim3:Play(0)
+								end
+								Found = true
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 4 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								local Sound2 = Instance.new("Sound")
+								Sound2.SoundId = "rbxassetid://10972191296"
+								Sound2.Volume = 3
+								Sound2.RollOffMaxDistance = 250
+								Sound2.Parent = plr.Character.Torso
+								Sound2:Play()
+								game:GetService("Debris"):AddItem(Sound2,5)
+								v.Parent.LastHit.Value = plr
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+									v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+								end
+								Broke = true
+								break
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move,"First","Left")
+							end
+						end
+					end
+				until os.clock() - Start >= 0.1 or Stunned == true
+				task.wait(0.05)
+				plr.PlayerGui.HUD.Combo.Value = 2
+			else
+				task.wait(0.1)
+			end
+		elseif plr.PlayerGui.HUD.Combo.Value == 2 then
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://16791392721"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			task.wait(0.35)
+			local Part = Instance.new("Part")
+			Part.Anchored = true
+			Part.Size = Vector3.new(3.982, 5.925, 3.673)
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.49)
+			local Start = os.clock()
+			local Hit = {}
+			local Broke = false
+			local Stunned = false
+			local Found = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				if Broke == false and Stunned == false then
+					for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+							table.insert(Hit,v.Parent)
+							if not v.Parent:FindFirstChild("Armor") then
+								for i,x in pairs(v.Parent:GetChildren()) do
+									if x.Name == "Stun" then
+										x:Destroy()
+									end
+								end
+								local Stun = Instance.new("BoolValue")
+								Stun.Name = "Stun"
+								Stun.Parent = v.Parent
+								game:GetService("Debris"):AddItem(Stun,1.15)
+								for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+									an:Stop(0)
+								end
+								local Anim3 = Instance.new("Animation")
+								Anim3.AnimationId = "rbxassetid://16791357742"
+								local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+								Anim3:Play(0)
+								local CameraShake = script.CameraShake:Clone()
+								CameraShake.Parent = plr.Character
+								game:GetService("Debris"):AddItem(CameraShake,0.35)
+							end
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.Humanoid.Health -= 5 * plr.PL.Value * plr.Character.Multiplier.Value
+							else
+								v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+							end
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191532"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							v.Parent.LastHit.Value = plr
+							if not v.Parent:FindFirstChild("Armor") then
+								Found = true
+								v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+								v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+							end
+							Broke = true
+							break
+						elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							table.insert(Hit,v.Parent)
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+						end
+					end
+				end
+			until os.clock() - Start >= 0.1 or Stunned == true
+			task.wait(0.5)
+			if Found == true then
+				plr.PlayerGui.HUD.Combo.Value = 3
+			else
+				task.wait(0.1)
+				plr.PlayerGui.HUD.Combo.Value = 1
+			end
+		elseif plr.PlayerGui.HUD.Combo.Value == 3 then
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://16791410011"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			task.wait(0.35)
+			local Part = Instance.new("Part")
+			Part.Anchored = true
+			Part.Size = Vector3.new(3.982, 5.925, 3.673)
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.49)
+			local Start = os.clock()
+			local Hit = {}
+			local Broke = false
+			local Stunned = false
+			local Found = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)
+				if Broke == false and Stunned == false then
+					for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+							table.insert(Hit,v.Parent)
+							local Anim3 = Instance.new("Animation")
+							Anim3.AnimationId = "rbxassetid://16791422027"
+							local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+							if not v.Parent:FindFirstChild("Armor") then
+								for i,x in pairs(v.Parent:GetChildren()) do
+									if x.Name == "Stun" then
+										x:Destroy()
+									end
+								end
+								local Stun = Instance.new("BoolValue")
+								Stun.Name = "Stun"
+								Stun.Parent = v.Parent
+								game:GetService("Debris"):AddItem(Stun,2.5)
+								for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+									an:Stop(0)
+								end
+								local CameraShake = script.CameraShake:Clone()
+								CameraShake.Parent = plr.Character
+								game:GetService("Debris"):AddItem(CameraShake,0.35)
+								Anim3:Play(0)
+							end
+							Found = true
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.Humanoid.Health -= 5 * plr.PL.Value * plr.Character.Multiplier.Value
+							else
+								v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+							end
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191401"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							v.Parent.LastHit.Value = plr
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-2.99)*CFrame.Angles(0,math.rad(180),0)
+								v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+								Broke = true
+								local Tween = game:GetService("TweenService"):Create(v.Parent.HumanoidRootPart,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=v.Parent.HumanoidRootPart.CFrame*CFrame.new(0,0,200)})
+								Tween:Play()
+								local Stunned2 = false
+								v.Parent.ChildAdded:Connect(function(Child)
+									if Child.Name == "Stun" then
+										Stunned2 = true
+									end
+								end)
+								local Start = os.clock()
+								spawn(function()
+									local Part2 = Instance.new("Part")
+									Part2.Size = Vector3.new(0.607, 3.248, 4.67)
+									Part2.Anchored = true
+									Part2.CFrame = v.Parent.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,2.765)*CFrame.Angles(0,math.rad(90),0)
+									v.Parent.Humanoid.AutoRotate = false
+									v.Parent.HumanoidRootPart.Anchored = true
+									local TimePassed = 0
+									repeat
+										game:GetService("RunService").Heartbeat:Wait()
+										Part2.CFrame = v.Parent.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,2.765)*CFrame.Angles(0,math.rad(90),0)
+										for i,x in pairs(workspace:GetPartsInPart(Part2,OverlapParams.new())) do
+											local Broke = false
+											if x:IsA("Part") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("MeshPart") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("UnionOperation") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") then
+												local Anim2 = Instance.new("Animation")
+												Anim2.AnimationId = "rbxassetid://10849475801"
+												local Anim2 = v.Parent.Humanoid:LoadAnimation(Anim2)
+												Anim2:Play()
+												Anim3:Stop()
+												Tween:Cancel()
+												Broke = true
+												if not v.Parent:FindFirstChild("Armor") then
+													for i,x in pairs(v.Parent:GetChildren()) do
+														if x.Name == "Stun" then
+															x:Destroy()
+														end
+													end
+													local Stun = Instance.new("BoolValue")
+													Stun.Name = "Stun"
+													Stun.Parent = v.Parent
+													Stun.Destroying:Connect(function()
+														Anim2:Stop()
+													end)
+													game:GetService("Debris"):AddItem(Stun,1.5)
+												end
+												v.Parent.HumanoidRootPart.Anchored = false
+												v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,50,0)
+
+												if Broke == true then
+													break
+												end
+											end
+										end
+									until v.Parent.Humanoid.Health <= 0 or Stunned2 == true or os.clock() - Start >= 2.5
+									Part2:Destroy()
+									v.Parent.Humanoid.AutoRotate = true
+									v.Parent.HumanoidRootPart.Anchored = false
+								end)
+							end
+							break
+						elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							table.insert(Hit,v.Parent)
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+						end
+					end
+				end
+			until os.clock() - Start >= 0.1 or Stunned == true
+			task.wait(0.7)
+			plr.PlayerGui.HUD.Combo.Value = 0
+			spawn(function()
+				task.wait(0.95)
+				plr.PlayerGui.HUD.Combo.Value = 1
+			end)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Ki Charge" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10798764380"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			task.wait(0.5)
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local STO = os.clock()
+			spawn(function()
+				task.wait(1.15 - (os.clock() - STO))
+				game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+			end)
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = true
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10798775137"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Stopped = false
+			local StopMeditating = script.KiCharge:Clone()
+			StopMeditating.Parent = plr.Character
+			StopMeditating.RemoteEvent.OnServerEvent:Connect(function()
+				Stopped = true
+			end)
+			local CameraShake = script.CameraShake:Clone()
+			CameraShake.Parent = plr.Character
+			spawn(function()
+				task.wait(0.95)
+				local Sound5 = Instance.new("Sound")
+				Sound5.SoundId = "rbxassetid://10800465375"
+				Sound5.Volume = 3
+				Sound5.RollOffMaxDistance = 250
+				Sound5.Parent = plr.Character.Torso
+				Sound5:Play()
+				spawn(function()
+					while game:GetService("RunService").Heartbeat:Wait() do
+						if Stopped == true then
+							Sound5:Stop()
+							Sound5:Destroy()
+							break
+						end
+					end
+				end)
+				while task.wait(3.15) do
+					Sound5:Play()
+				end
+			end)
+			local Start = os.clock()
+			repeat
+				task.wait(0.03)
+				plr.PlayerGui.HUD.KiValue.Value += 5
+				if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+					plr.PlayerGui.HUD.KiValue.Value = 3000
+				end
+			until plr.Character:FindFirstChild("Stun") or Stopped == true or plr.Character.Humanoid.Health <= 0
+			Stopped = true
+			StopMeditating:Destroy()
+			Sound:Stop()
+			CameraShake:Destroy()
+			if not plr.Character:FindFirstChild("Stun") then
+				task.wait(0.4 - (os.clock() - Start))
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+				Anim:Stop()
+			else
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+				Anim:Stop()
+			end
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Meditate" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10797777130"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play(0.15)
+			local Stopped = false
+			local StopMeditating = script.MeditationStop:Clone()
+			StopMeditating.Parent = plr.Character
+			StopMeditating.RemoteEvent.OnServerEvent:Connect(function()
+				Stopped = true
+			end)
+			repeat
+				task.wait(0.1)
+				local IncreasedNumber = 1500
+				if plr.Character.IsInLake.Value == true then
+					IncreasedNumber = 2500
+					plr.PL.Value += 25
+					plr.HP.Value += 2500
+				else
+					plr.PL.Value += 15
+					plr.HP.Value += 1500
+				end
+				if plr.PL.Value > 1000000 then
+					plr.PL.Value = 1000000
+				end
+				if plr.HP.Value > 150000000 then
+					plr.HP.Value = 150000000
+				else
+					plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+					plr.Character.Humanoid.Health += (IncreasedNumber * plr.Character.Multiplier.Value) / 100 * (plr.Character.Humanoid.Health/(plr.Character.Humanoid.MaxHealth-IncreasedNumber* plr.Character.Multiplier.Value)*100)
+				end
+			until plr.Character:FindFirstChild("Stun") or Stopped == true or plr.Character.Humanoid.Health <= 0
+			Stopped = true
+			Anim:Stop()
+			StopMeditating:Destroy()
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Afterimage" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 200
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Super Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.Character.Humanoid.AutoRotate = false
+			plr.PlayerGui.HUD.KiValue.Value -= 100
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10796602262"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10796776948"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = plr.Character.Torso
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,10)
+			local Part = Instance.new("Part")
+			Part.Shape = Enum.PartType.Ball
+			Part.Material = "Neon"
+			Part.Massless = true
+			Part.Color = Color3.fromRGB(4,175,236)
+			Part.CastShadow = false
+			Part.Size = Vector3.new(1.844, 1.844, 1.844)
+			Part.CanCollide = false
+			local Motor = Instance.new("Motor6D")
+			Motor.Part0 = Part
+			Motor.Part1 = plr.Character["Right Arm"]
+			Motor.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+			local Part2 = Part:Clone()
+			Motor.Parent = Part
+			Part2.Color = Color3.fromRGB(248, 248, 248)
+			Part2.Size = Vector3.new(1.614, 1.614, 1.614)
+			Part2.Parent = Part
+			game:GetService("Debris"):AddItem(Part,20)
+			game:GetService("Debris"):AddItem(Part2,20)
+			Part.Transparency = 0.5
+			local Weld = Instance.new("Weld")
+			Weld.Part0 = Part
+			Weld.Part1 = Part2
+			Weld.Parent = Part2
+			Part.Parent = workspace.MouseIgnore
+			local Start = os.clock()
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			until os.clock() - Start >= 1.45 or plr.Character:FindFirstChild("Stun") or plr.Character.Humanoid.Health <= 0
+			if not plr.Character:FindFirstChild("Stun") then
+				local CameraShake = script.CameraShake:Clone()
+				CameraShake.Parent = plr.Character
+				Motor.Part0 = nil
+				Motor.Part1 = nil
+				Weld.Part0 = nil
+				Weld.Part1 = nil
+				Motor:Destroy()
+				Weld:Destroy()
+				Part.Size = Vector3.new(9.5,9.5,9.5)
+				Part2.Size = Vector3.new(9,9,9)
+				Part.Anchored = true
+				Part2.Anchored = true
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-5.987)
+				Part2.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-5.987)
+				local Part3 = Instance.new("Part")
+				Part3.Anchored = true
+				Part3.Transparency = 0.5
+				Part3.Shape = Enum.PartType.Cylinder
+				Part3.Material = "Neon"
+				Part3.Massless = true
+				Part3.Color = Color3.fromRGB(4,175,236)
+				Part3.CastShadow = false
+				Part3.Size = Vector3.new(4, 8.077, 8.07)
+				Part3.CanCollide = false
+				Part3.CFrame = Part.CFrame*CFrame.new(0,0,-1.5)*CFrame.Angles(0,math.rad(90),0)
+				local Part4 = Part3:Clone()
+				Part4.Color = Color3.fromRGB(248, 248, 248)
+				Part4.Transparency = 0
+				Part4.Size = Vector3.new(3.5,7.577,7.57)
+				game:GetService("Debris"):AddItem(Part3,20)
+				game:GetService("Debris"):AddItem(Part4,20)
+				Part4.Parent = workspace.MouseIgnore
+				Part3.Parent = workspace.MouseIgnore
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(3,Enum.EasingStyle.Linear),{Size=Vector3.new(500,8.077, 8.07)}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(3,Enum.EasingStyle.Linear),{CFrame=Part3.CFrame*CFrame.new(250,0,0)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(3,Enum.EasingStyle.Linear),{Size=Vector3.new(499.5,7.077,7.07)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(3,Enum.EasingStyle.Linear),{CFrame=Part4.CFrame*CFrame.new(250,0,0)}):Play()
+				spawn(function()
+					local Stot = os.clock()
+					repeat
+						game:GetService("RunService").Heartbeat:Wait()
+						local Hit = {}
+						for i,v in pairs(workspace:GetPartsInPart(Part3,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.075 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+							end
+						end
+						for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.075 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+							end
+						end
+					until os.clock() - Stot >= 3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				end)
+				local SPAT = os.clock()
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+				until os.clock() - SPAT >= 3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part2,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(0.2),{Transparency=1}):Play()
+				CameraShake:Destroy()
+				task.wait(0.2)
+				Part3:Destroy()
+				Part4:Destroy()
+			end
+			Part:Destroy()
+			Part2:Destroy()
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+			task.wait(0.1)
+			plr.Character.Humanoid.AutoRotate = true
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "God Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.Character.Humanoid.AutoRotate = false
+			plr.PlayerGui.HUD.KiValue.Value -= 150
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10799299637"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			--Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10799538701"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = plr.Character.Torso
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,10)
+			local Part = Instance.new("Part")
+			Part.Shape = Enum.PartType.Ball
+			Part.Material = "Neon"
+			Part.Massless = true
+			Part.Color = Color3.fromRGB(4,175,236)
+			Part.CastShadow = false
+			Part.Size = Vector3.new(1.844, 1.844, 1.844)
+			Part.CanCollide = false
+			local Motor = Instance.new("Motor6D")
+			Motor.Part0 = Part
+			Motor.Part1 = plr.Character["Right Arm"]
+			Motor.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+			local Part2 = Part:Clone()
+			Motor.Parent = Part
+			--Part2.Color = Color3.fromRGB(248, 248, 248)
+			Part2.Size = Vector3.new(1.614, 1.614, 1.614)
+			Part2.Parent = Part
+			Part.Transparency = 0.5
+			local Weld = Instance.new("Weld")
+			Weld.Part0 = Part
+			Weld.Part1 = Part2
+			Weld.Parent = Part2
+			game:GetService("Debris"):AddItem(Part,20)
+			game:GetService("Debris"):AddItem(Part2,20)
+			Part.Parent = workspace.MouseIgnore
+			local Start = os.clock()
+			local Invincibility = Instance.new("BoolValue")
+			Invincibility.Name = "Invincibility"
+			Invincibility.Parent = plr.Character
+			plr.Character.HumanoidRootPart.Anchored = true
+			plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+			local Start = os.clock()
+			local Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(0.75 - (os.clock() - Start),Enum.EasingStyle.Cubic),{CFrame=plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,10,-17.5)})
+			Tween:Play()
+			spawn(function()
+				task.wait(0.75 - (os.clock() - Start))
+				Invincibility:Destroy()
+			end)
+			spawn(function()
+				task.wait(1.5 - (os.clock() - Start))
+				local Sound4 = Instance.new("Sound")
+				Sound4.SoundId = "rbxassetid://10785324226"
+				Sound4.Volume = 3
+				Sound4.RollOffMaxDistance = 250
+				Sound4.Parent = plr.Character.Torso
+				Sound4:Play()
+				task.wait(5)
+				Sound4:Destroy()
+			end)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Tween:Cancel()
+				if os.clock() - Start < 0.75 then
+					Tween:Play()
+				end
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			until os.clock() - Start >= 1.85 or plr.Character:FindFirstChild("Stun") or plr.Character.Humanoid.Health <= 0
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10799540259"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.Parent = plr.Character.Torso	
+			game:GetService("Debris"):AddItem(Sound,5)	
+			if not plr.Character:FindFirstChild("Stun") then
+				Sound:Play()
+				local CameraShake = script.CameraShake:Clone()
+				CameraShake.Parent = plr.Character
+				Motor.Part0 = nil
+				Motor.Part1 = nil
+				Weld.Part0 = nil
+				Weld.Part1 = nil
+				Motor:Destroy()
+				Weld:Destroy()
+				Part.Size = Vector3.new(13.5,13.5,13.5)
+				Part2.Size = Vector3.new(13,13,13)
+				Part.Anchored = true
+				Part2.Anchored = true
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-8.187)
+				Part2.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-8.187)
+				local Part3 = Instance.new("Part")
+				Part3.Anchored = true
+				Part3.Transparency = 0.5
+				Part3.Shape = Enum.PartType.Cylinder
+				Part3.Material = "Neon"
+				Part3.Massless = true
+				Part3.Color = Color3.fromRGB(4,175,236)
+				Part3.CastShadow = false
+				Part3.Size = Vector3.new(4, 11.077, 11.07)
+				Part3.CanCollide = false
+				Part3.CFrame = Part.CFrame*CFrame.new(0,0,-1.5)*CFrame.Angles(0,math.rad(90),0)
+				local Part4 = Part3:Clone()
+				--Part4.Color = Color3.fromRGB(248, 248, 248)
+				Part4.Transparency = 0
+				Part4.Size = Vector3.new(3.5,10.577,10.57)
+				game:GetService("Debris"):AddItem(Part3,20)
+				game:GetService("Debris"):AddItem(Part4,20)
+				Part4.Parent = workspace.MouseIgnore
+				Part3.Parent = workspace.MouseIgnore
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(3,Enum.EasingStyle.Linear),{Size=Vector3.new(500,11.077, 11.07)}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(3,Enum.EasingStyle.Linear),{CFrame=Part3.CFrame*CFrame.new(250,0,0)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(3,Enum.EasingStyle.Linear),{Size=Vector3.new(499.5,10.577,10.57)}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(3,Enum.EasingStyle.Linear),{CFrame=Part4.CFrame*CFrame.new(250,0,0)}):Play()
+				spawn(function()
+					local Stot = os.clock()
+					repeat
+						game:GetService("RunService").Heartbeat:Wait()
+						local Hit = {}
+						for i,v in pairs(workspace:GetPartsInPart(Part3,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.075 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							end
+						end
+						for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+							if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+								table.insert(Hit,v.Parent)
+								if not v.Parent:FindFirstChild("Armor") then
+									v.Parent.Humanoid.Health -= 0.6 * plr.PL.Value * plr.Character.Multiplier.Value
+								else
+									v.Parent.Humanoid.Health -= 0.075 * plr.PL.Value * plr.Character.Multiplier.Value
+								end
+								v.Parent.LastHit.Value = plr
+							elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+								table.insert(Hit,v.Parent)
+								require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+							end
+						end
+					until os.clock() - Stot >= 3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				end)
+				local SPAT = os.clock()
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+				until os.clock() - SPAT >= 3 or plr.Character.Humanoid.Health <= 0 or plr.Character:FindFirstChild("Stun")
+				game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part2,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part3,TweenInfo.new(0.2),{Transparency=1}):Play()
+				game:GetService("TweenService"):Create(Part4,TweenInfo.new(0.2),{Transparency=1}):Play()
+				CameraShake:Destroy()
+				task.wait(0.2)
+				Part3:Destroy()
+				Part4:Destroy()
+			end
+			Part:Destroy()
+			Part2:Destroy()
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+			task.wait(0.1)
+			plr.Character.Humanoid.AutoRotate = true
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Kaioken!" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.CurrentForm.Value == "SSJB" then
+			plr.PlayerGui.HUD.KiValue.Value -= 600
+			plr.Character.Multiplier.Value = 1000
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("Bright red")
+			Part.Size = Vector3.new(15,15,15)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("Debris"):AddItem(Part,5)
+			if plr then
+				plr.CurrentForm.Value = "SSJBK"
+			end
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.SSJBHair:Clone()
+				Hair.Color = Color3.fromRGB(255, 114, 114)
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(-0.0199596882, 0.999499798, 0.218948364, -0.999918997, -0.00796987955, 0.00993279088, -0.00795589015, 0.999967337, 0.00144716306, -0.00994400028, 0.00136802159, -0.999949634)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.SSJBKaiokenAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(255,0,0))
+				NewAura.Name = "Aura2"
+				NewAura.Brightness = 3
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				local A = Instance.new("BoolValue")
+				A.Name = "Aura"
+				A.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				local A2 = Instance.new("BoolValue")
+				A2.Name = "Activated"
+				A2.Parent = A
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 7.386, 0)
+				local Outline = game.ReplicatedStorage.KaiokenOutline:Clone()
+				Outline.Parent = plr.Character
+				local Did = false
+				plr.CurrentForm.Changed:Connect(function()
+					if Did == false then
+						Did = true
+						NewAura.Activated.Value = false
+						Outline:Destroy()
+						task.wait(5)
+						NewAura:Destroy()
+					end
+				end)
+			end)
+			if plr then
+				local MaxHP = plr.Character.Humanoid.MaxHealth
+				local HP = plr.Character.Humanoid.Health
+				local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+				plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+				plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			end
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(9.5,9.5,9.5)}):Play()
+			task.wait(0.2)
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.2)
+		else
+			plr.PlayerGui.HUD.KiValue.Value -= 300
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Kienzan Rokumaiba" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 250
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Energy Shield" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 300
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "One-Inch Punch" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 200
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "God Crash" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 300
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Angry Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 800
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Shining Ki - Dama" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 230
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Gekiretsu Madan" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 200
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Blast Fist" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 320
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Meteor Smash" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 600
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Power Stance" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value += 800
+		if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+			plr.PlayerGui.HUD.KiValue.Value = 3000
+		end
+		-- Ended
+		spawn(function()
+			plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 5
+			task.wait(1.5)
+			plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 5
+			task.wait(1.5)
+			plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 5
+		end)
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Scattering Bullet" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 120
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Saiyan Aura Blast" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 150
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Dual Ki Blast Dash" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 300
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Meteor Blast" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 350
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Flashing Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 800
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Full-Power Charge" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value += 1000
+		if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+			plr.PlayerGui.HUD.KiValue.Value = 3000
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "God Bind" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 350
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Hyperspeed Movement" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 200
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Super God Fist" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 300
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "God Dragon Shot" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 320
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Rage Combo" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 2500
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Roar" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value += 600
+		if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+			plr.PlayerGui.HUD.KiValue.Value = 3000
+		end
+		-- Ended
+		plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 10
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Limit Break" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value += 500
+		if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+			plr.PlayerGui.HUD.KiValue.Value = 3000
+		end
+		-- Ended
+		plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 12
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Spirit Shot" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 150
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Kienzan" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 200
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10827131444"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Kienzan = script.Kienzan:Clone()
+			Kienzan.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(2,3,0)*CFrame.Angles(0,math.rad(90),0)
+			Kienzan.Parent = workspace.MouseIgnore
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10972037534"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = Kienzan
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,7.5)
+			spawn(function()
+				game:GetService("TweenService"):Create(Kienzan,TweenInfo.new(0.15,Enum.EasingStyle.Linear),{Size=Vector3.new(1.95, 1.432, 1.383)}):Play()
+				task.wait(0.15)
+				game:GetService("TweenService"):Create(Kienzan,TweenInfo.new(0.6,Enum.EasingStyle.Cubic,Enum.EasingDirection.Out),{Size=Vector3.new(7.917, 0.243, 7.744)}):Play()
+			end)
+			local ST = os.clock()
+			plr.Character.HumanoidRootPart.Anchored = true
+			plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Kienzan.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(2,3,0)*CFrame.Angles(0,math.rad(90),0)
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+			until os.clock() - ST >= 1.6 or Stunned == true or plr.Character.Humanoid.Health <= 0
+			game:GetService("TweenService"):Create(Kienzan,TweenInfo.new(0.05,Enum.EasingStyle.Linear),{CFrame=plr.Character.HumanoidRootPart.CFrame*CFrame.new(2,2.5,2)*CFrame.Angles(0,math.rad(90),0)}):Play()
+			task.wait(0.05)
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10972037690"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = Kienzan
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,7.5)
+			spawn(function()
+				local Hit = {}
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					for i,v in pairs(workspace:GetPartsInPart(Kienzan,OverlapParams.new())) do
+						if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+							table.insert(Hit,v.Parent)
+							if not v.Parent:FindFirstChild("Armor") then
+								v.Parent.Humanoid.Health -= 15 * plr.PL.Value * plr.Character.Multiplier.Value
+							else
+								v.Parent.Humanoid.Health -= 1.8 * plr.PL.Value * plr.Character.Multiplier.Value
+							end
+							v.Parent.LastHit.Value = plr
+						elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							table.insert(Hit,v.Parent)
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+						end
+					end
+				until Kienzan.Parent == nil
+			end)
+			spawn(function()
+				Kienzan.CFrame = Kienzan.CFrame*CFrame.Angles(0,0,math.rad(-4.25))
+				game:GetService("TweenService"):Create(Kienzan,TweenInfo.new(7.5,Enum.EasingStyle.Linear),{Orientation=Vector3.new(Kienzan.Orientation.X,Kienzan.Orientation.Y,30)}):Play()
+				local OSCLOCK = os.clock()
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					game:GetService("TweenService"):Create(Kienzan,TweenInfo.new(15,Enum.EasingStyle.Linear),{CFrame=Kienzan.CFrame*CFrame.Angles(0,math.rad(-90),0)*CFrame.new(0,0,-1000)}):Play()
+				until os.clock() - OSCLOCK >= 12.5
+				Kienzan:Destroy()
+			end)
+			task.wait(1.15)
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Heat Absorption" then
+		if plr.CurrentForm.Value == "UIO" then
+			plr.Character.Multiplier.Value = 1000
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("Institutional white")
+			Part.Size = Vector3.new(15,15,15)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("Debris"):AddItem(Part,5)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.UIHair:Clone()
+				Hair.Color = Color3.fromRGB(255,255,255)
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.0166511536, 0.999985218, -0.105514526, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(0,255,255))
+				NewAura.Name = "Aura"
+				NewAura.Brightness = 2
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+			end)
+			if plr then
+				plr.CurrentForm.Value = "MUI"
+			end
+			if plr then
+				local MaxHP = plr.Character.Humanoid.MaxHealth
+				local HP = plr.Character.Humanoid.Health
+				local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+				plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+				plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			end
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(9.5,9.5,9.5)}):Play()
+			task.wait(0.2)
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.2)
+		end
+	elseif Move == "Instant Kick" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 75
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10974617191"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play(0)
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			task.wait(0.45)
+			if Stunned == false then
+				local Found = nil
+				local Part = Instance.new("Part")
+				Part.Size = Vector3.new(10,10,10)
+				Part.Position = plr.PlayerGui.HUD.MousePosition.Value
+				for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+					if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and v.Parent ~= plr.Character then
+						Found = v.Parent
+					end
+				end
+				if Found == nil then
+					local Or = plr.Character.HumanoidRootPart.Orientation
+					local Position2 = (CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))).Position
+					local Magnitude = (Position2 - plr.Character.HumanoidRootPart.Position).magnitude
+					if Magnitude <= 125 then
+						local Sound3 = Instance.new("Sound")
+						Sound3.SoundId = "rbxassetid://10785835049"
+						Sound3.Volume = 3
+						Sound3.RollOffMaxDistance = 250
+						Sound3.Parent = plr.Character.Torso
+						Sound3:Play()
+						game:GetService("Debris"):AddItem(Sound3,5)
+						plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))
+					end
+					Anim:Stop(0.05)
+					task.wait(0.05)
+				else
+					local Or = plr.Character.HumanoidRootPart.Orientation
+					local Position2 = (CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))).Position
+					local Magnitude = (Position2 - plr.Character.HumanoidRootPart.Position).magnitude
+					if Magnitude <= 175 then
+						plr.Character.Humanoid.AutoRotate = false
+						local Armor = Instance.new("BoolValue")
+						Armor.Name = "Armor"
+						Armor.Parent = plr.Character
+						plr.Character.HumanoidRootPart.Anchored = true
+						local Sound3 = Instance.new("Sound")
+						Sound3.SoundId = "rbxassetid://10785835049"
+						Sound3.Volume = 3
+						Sound3.RollOffMaxDistance = 250
+						Sound3.Parent = plr.Character.Torso
+						Sound3:Play()
+						game:GetService("Debris"):AddItem(Sound3,5)
+						plr.Character.HumanoidRootPart.CFrame = Found.HumanoidRootPart.CFrame*CFrame.new(0,0,3)
+						Anim:Play(0)
+						Anim:Stop(0)
+						local Anim = Instance.new("Animation")
+						Anim.AnimationId = "rbxassetid://10974623553"
+						local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+						Anim:Play(0)
+						task.wait(0.3)
+						local Part = Instance.new("Part")
+						Part.Anchored = true
+						Part.Size = Vector3.new(5.982, 7.925, 6.673)
+						Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-5.99)
+						local Start = os.clock()
+						local Hit = {}
+						local Broke = false
+						repeat
+							game:GetService("RunService").Heartbeat:Wait()
+							Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-5.99)
+							if Broke == false then
+								for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+									if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not table.find(Hit,v.Parent) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and v.Parent ~= plr.Character then
+										table.insert(Hit,v.Parent)
+										local Anim3 = Instance.new("Animation")
+										Anim3.AnimationId = "rbxassetid://10849475801"
+										local Anim3 = v.Parent.Humanoid:LoadAnimation(Anim3)
+										if not v.Parent:FindFirstChild("Armor") then
+											for i,x in pairs(v.Parent:GetChildren()) do
+												if x.Name == "Stun" then
+													x:Destroy()
+												end
+											end
+											local Stun = Instance.new("BoolValue")
+											Stun.Name = "Stun"
+											Stun.Parent = v.Parent
+											game:GetService("Debris"):AddItem(Stun,2.5)
+											for i,an in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+												an:Stop(0)
+											end
+											local CameraShake = script.CameraShake:Clone()
+											CameraShake.Parent = plr.Character
+											game:GetService("Debris"):AddItem(CameraShake,0.35)
+											Anim3:Play(0)
+											Stun.Destroying:Connect(function()
+												Anim3:Stop()
+											end)
+										end
+										if not v.Parent:FindFirstChild("Armor") then
+											v.Parent.Humanoid.Health -= 15 * plr.PL.Value * plr.Character.Multiplier.Value
+										else
+											v.Parent.Humanoid.Health -= 1.8 * plr.PL.Value * plr.Character.Multiplier.Value
+										end
+										local Sound2 = Instance.new("Sound")
+										Sound2.SoundId = "rbxassetid://10972191401"
+										Sound2.Volume = 3
+										Sound2.RollOffMaxDistance = 250
+										Sound2.Parent = plr.Character.Torso
+										Sound2:Play()
+										game:GetService("Debris"):AddItem(Sound2,7.5)
+										v.Parent.LastHit.Value = plr
+										if not v.Parent:FindFirstChild("Armor") then
+											v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0.076, 0.007,-1.765)
+											v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+											Broke = true
+											local Tween = game:GetService("TweenService"):Create(v.Parent.HumanoidRootPart,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=v.Parent.HumanoidRootPart.CFrame*CFrame.new(0,0,-200)})
+											Tween:Play()
+											local Stunned2 = false
+											v.Parent.ChildAdded:Connect(function(Child)
+												if Child.Name == "Stun" then
+													Stunned2 = true
+												end
+											end)
+											local Start = os.clock()
+											spawn(function()
+												local Part2 = Instance.new("Part")
+												Part2.Size = Vector3.new(0.607, 3.248, 4.67)
+												Part2.Anchored = true
+												Part2.CFrame = v.Parent.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-1.765)*CFrame.Angles(0,math.rad(90),0)
+												v.Parent.Humanoid.AutoRotate = false
+												v.Parent.HumanoidRootPart.Anchored = true
+												local TimePassed = 0
+												repeat
+													game:GetService("RunService").Heartbeat:Wait()
+													Part2.CFrame = v.Parent.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-1.765)*CFrame.Angles(0,math.rad(90),0)
+													for i,x in pairs(workspace:GetPartsInPart(Part2,OverlapParams.new())) do
+														local Broke = false
+														if x:IsA("Part") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("MeshPart") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("UnionOperation") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(v.Parent) and not x.Parent:FindFirstChild("Humanoid") then
+															Tween:Cancel()
+															Anim3:Stop()
+															local Anim2 = Instance.new("Animation")
+															Anim2.AnimationId = "rbxassetid://10849475801"
+															local Anim2 = v.Parent.Humanoid:LoadAnimation(Anim2)
+															Anim2:Play()
+															Broke = true
+															if not v.Parent:FindFirstChild("Armor") then
+																for i,x in pairs(v.Parent:GetChildren()) do
+																	if x.Name == "Stun" then
+																		x:Destroy()
+																	end
+																end
+																local Stun = Instance.new("BoolValue")
+																Stun.Name = "Stun"
+																Stun.Parent = v.Parent
+																Stun.Destroying:Connect(function()
+																	Anim2:Stop()
+																end)
+																game:GetService("Debris"):AddItem(Stun,1.5)
+															end
+															v.Parent.HumanoidRootPart.Anchored = false
+															v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,50,0)
+
+															if Broke == true then
+																break
+															end
+														end
+													end
+												until v.Parent.Humanoid.Health <= 0 or Stunned2 == true or os.clock() - Start >= 2.5
+												Part2:Destroy()
+												v.Parent.Humanoid.AutoRotate = true
+												v.Parent.HumanoidRootPart.Anchored = false
+											end)
+										end
+										break
+									elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+										table.insert(Hit,v.Parent)
+										require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+									end
+								end
+							end
+						until os.clock() - Start >= 0.1 or Stunned == true
+						task.wait(0.5)
+						plr.Character.Humanoid.AutoRotate = true
+						Armor:Destroy()
+						plr.Character.HumanoidRootPart.Anchored = false
+					end
+				end
+			end
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Perfect Transmission" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 75
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			if Stunned == false then
+				local Or = plr.Character.HumanoidRootPart.Orientation
+				local Position2 = (CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))).Position
+				local Magnitude = (Position2 - plr.Character.HumanoidRootPart.Position).magnitude
+				if Magnitude <= 200 then
+					local Sound3 = Instance.new("Sound")
+					Sound3.SoundId = "rbxassetid://10785835049"
+					Sound3.Volume = 3
+					Sound3.RollOffMaxDistance = 250
+					Sound3.Parent = plr.Character.Torso
+					Sound3:Play()
+					game:GetService("Debris"):AddItem(Sound3,5)
+					plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))
+				end
+				task.wait(0.05)
+			end
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Instant Transmission" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.PlayerGui.HUD.KiValue.Value -= 25
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10785677266"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play(0.05)
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			task.wait(0.3)
+			if Stunned == false then
+				local Or = plr.Character.HumanoidRootPart.Orientation
+				local Position2 = (CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))).Position
+				local Magnitude = (Position2 - plr.Character.HumanoidRootPart.Position).magnitude
+				if Magnitude <= 125 then
+					local Sound3 = Instance.new("Sound")
+					Sound3.SoundId = "rbxassetid://10785835049"
+					Sound3.Volume = 3
+					Sound3.RollOffMaxDistance = 250
+					Sound3.Parent = plr.Character.Torso
+					Sound3:Play()
+					game:GetService("Debris"):AddItem(Sound3,5)
+					plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.PlayerGui.HUD.MousePosition.Value)*CFrame.Angles(math.rad(Or.X),math.rad(Or.Y),math.rad(Or.Z))
+				end
+				Anim:Stop(0.05)
+				task.wait(0.05)
+			end
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Fly" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+			an:Stop()
+		end
+		local Anim = Instance.new("Animation")
+		Anim.AnimationId = "rbxassetid://10813011018"
+		local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+		Anim:Play()
+		plr.Character.HumanoidRootPart.Anchored = true
+		plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+		local Stunned = false
+		local Stopped = false
+		local Sound3 = Instance.new("Sound")
+		Sound3.SoundId = "rbxassetid://10785324226"
+		Sound3.Volume = 3
+		Sound3.RollOffMaxDistance = 250
+		Sound3.Parent = plr.Character.Torso
+		Sound3:Play()
+		game:GetService("Debris"):AddItem(Sound3,5)
+		if plr.Character:FindFirstChild("Stun") then
+			Stunned = true
+			Stopped = true
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+		end
+		plr.Character.ChildAdded:Connect(function(Child)
+			if Child.Name == "Stun" then
+				Stunned = true
+				Stopped = true
+				plr.Character.HumanoidRootPart.Anchored = false
+				plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+			end
+		end)
+		local Stall = os.clock()
+		repeat
+			game:GetService("RunService").Heartbeat:Wait()
+			plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+		until os.clock() - Stall >= 0.5 or Stunned == true or plr.Character.Humanoid.Health <= 0
+		local Anim3 = Instance.new("Animation")
+		Anim3.AnimationId = "rbxassetid://10813109562"
+		local Anim3 = plr.Character.Humanoid:LoadAnimation(Anim3)
+		if Stunned == false then
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local ST = os.clock()
+			spawn(function()
+				task.wait(1.15 - (os.clock() - ST))
+				game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+			end)
+			Anim3:Play()
+			local Part = Instance.new("Part")
+			Part.Size = Vector3.new(0.607, 3.248, 4.67)
+			Part.Anchored = true
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+			plr.Character.HumanoidRootPart.Anchored = true
+			plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+			plr.Character.Humanoid.AutoRotate = false
+			local Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(0.175,Enum.EasingStyle.Linear),{CFrame=CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)*CFrame.new(0,0,-16.25)})
+			Tween:Play()
+			local StopMeditating = script.MeditationStop:Clone()
+			StopMeditating.Parent = plr.Character
+			StopMeditating.YOrT.Value = "T"
+			StopMeditating.RemoteEvent.OnServerEvent:Connect(function()
+				Stopped = true
+			end)
+			local TimePassed = 0
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(0.175,Enum.EasingStyle.Linear),{CFrame=CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)*CFrame.new(0,0,-16.25)})
+				Tween:Cancel()
+				Tween:Play()
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+				for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+					local Broke = false
+					if v:IsA("Part") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") or v:IsA("MeshPart") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") or v:IsA("UnionOperation") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") then
+						local Anim2 = Instance.new("Animation")
+						Anim2.AnimationId = "rbxassetid://10800053477"
+						local Anim2 = plr.Character.Humanoid:LoadAnimation(Anim2)
+						Anim2:Play()
+						Anim3:Stop()
+						Tween:Cancel()
+						repeat
+							game:GetService("RunService").Heartbeat:Wait()
+							Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+							local Found = false
+							plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+							for i,x in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+								if x:IsA("Part") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("MeshPart") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("UnionOperation") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") then
+									Found = true
+								end
+							end
+						until Found == false or Stopped == true or Stunned == true or plr.Character.Humanoid.Health <= 0
+						Anim2:Stop()
+						Anim3:Play()
+						Broke = true
+						Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(2.8,Enum.EasingStyle.Linear),{CFrame=plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-260)})
+						Tween:Play()
+						if Broke == true then
+							break
+						end
+					end
+				end
+			until Stopped == true or Stunned == true or plr.Character.Humanoid.Health <= 0
+			Tween:Cancel()
+			Anim3:Stop()
+			StopMeditating:Destroy()
+			if Stunned == false then
+				local Anim = Instance.new("Animation")
+				Anim.AnimationId = "rbxassetid://10813210336"
+				local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+				Anim:Play()
+				task.wait(0.4)
+			end
+			plr.Character.HumanoidRootPart.Anchored = false
+			plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+			plr.Character.Humanoid.AutoRotate = true
+			task.wait(0.05)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Meteor Combination" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if not plr.Character:FindFirstChild("Stun") then
+			plr.Character.Humanoid.AutoRotate = false
+			plr.PlayerGui.HUD.KiValue.Value -= 500
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10799954977"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local Stunned = false
+			if plr.Character:FindFirstChild("Stun") then
+				Stunned = true
+			end
+			plr.Character.ChildAdded:Connect(function(Child)
+				if Child.Name == "Stun" then
+					Stunned = true
+				end
+			end)
+			local AnimationTime = os.clock()
+			task.wait(0.7)
+			if Stunned == false then
+				local Part = Instance.new("Part")
+				Part.Size = Vector3.new(0.607, 3.248, 4.67)
+				Part.Anchored = true
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+				local Invincibility = Instance.new("BoolValue")
+				Invincibility.Name = "Invincibility"
+				Invincibility.Parent = plr.Character
+				plr.Character.HumanoidRootPart.Anchored = true
+				plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+				local Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(2.8,Enum.EasingStyle.Linear),{CFrame=plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-320)})
+				Tween:Play()
+				local TimePassed = 0
+				repeat
+					game:GetService("RunService").Heartbeat:Wait()
+					Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+					for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+						local Broke = false
+						if v:IsA("Part") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") or v:IsA("MeshPart") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") or v:IsA("UnionOperation") and v.CanCollide == true and v.Name ~= "Torso" and v ~= Part and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Humanoid") then
+							local Anim2 = Instance.new("Animation")
+							Anim2.AnimationId = "rbxassetid://10800053477"
+							local Anim2 = plr.Character.Humanoid:LoadAnimation(Anim2)
+							Anim2:Play()
+							Anim:Stop()
+							Tween:Cancel()
+							AnimationTime = (os.clock() -  AnimationTime)
+							TimePassed += AnimationTime
+							repeat
+								local TimeOnWall = os.clock()
+								game:GetService("RunService").Heartbeat:Wait()
+								Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(-0.317,-0.376,-2.765)*CFrame.Angles(0,math.rad(90),0)
+								local Found = false
+								plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+								for i,x in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+									if x:IsA("Part") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("MeshPart") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") or x:IsA("UnionOperation") and x.CanCollide == true and x.Name ~= "Torso" and x ~= Part and not x:IsDescendantOf(plr.Character) and not x.Parent:FindFirstChild("Humanoid") then
+										Found = true
+									end
+								end
+								TimePassed += (os.clock() - TimeOnWall) / 5
+							until Found == false or TimePassed >= 3.5
+							AnimationTime = os.clock()
+							Anim2:Stop()
+							Anim:Play()
+							Anim.TimePosition = TimePassed
+							Broke = true
+							local TimeToPass = 2.8 - (os.clock() - AnimationTime + TimePassed - 0.7)
+							Tween = game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(2.8 - (os.clock() - AnimationTime + TimePassed - 0.7),Enum.EasingStyle.Linear),{CFrame=plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-(320 / 2.8 * TimeToPass))})
+							Tween:Play()
+						elseif v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and v.Parent.Humanoid.Health > 0 and not v:IsDescendantOf(plr.Character) and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Armor") then
+							for i,animation in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+								animation:Stop()
+							end
+							for i,animation in pairs(v.Parent.Humanoid:GetPlayingAnimationTracks()) do
+								animation:Stop()
+							end
+							for i,v in pairs(v.Parent:GetChildren()) do
+								if v.Name == "Stun" then
+									v:Destroy()
+								end
+							end
+							local Invincibility2 = Instance.new("BoolValue")
+							Invincibility2.Name = "Invincibility"
+							Invincibility2.Parent = v.Parent
+							v.Parent.Humanoid.AutoRotate = false
+							local Stun = Instance.new("BoolValue")
+							Stun.Name = "Stun"
+							Stun.Parent = v.Parent
+							local Finished = false
+							local CanTurnCharacter = true
+							local Pos = plr.Character.HumanoidRootPart.CFrame
+							local Pos2 = v.Parent.HumanoidRootPart.Position
+							plr.Character.HumanoidRootPart.Anchored = true
+							plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+							v.Parent.HumanoidRootPart.Anchored = true
+							plr.Character.HumanoidRootPart.CFrame = Pos
+							v.Parent.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-2.6)*CFrame.Angles(0,math.rad(180),0)
+							spawn(function()
+								repeat
+									game:GetService("RunService").Heartbeat:Wait()
+									if Finished == false then
+										plr.Character.HumanoidRootPart.Anchored = true
+										plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+										v.Parent.HumanoidRootPart.Anchored = true
+										if CanTurnCharacter == true then
+											plr.Character.HumanoidRootPart.CFrame = Pos
+										end
+										v.Parent.HumanoidRootPart.CFrame = Pos*CFrame.new(0,0,-2.6)*CFrame.Angles(0,math.rad(180),0)
+									end
+								until Finished == true
+							end)
+							Tween:Cancel()
+							TimePassed = 3.5
+							local Anim = Instance.new("Animation")
+							Anim.AnimationId = "rbxassetid://10807231177"
+							local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+							Anim:Play()
+							local Anim = Instance.new("Animation")
+							Anim.AnimationId = "rbxassetid://10807233154"
+							local Anim = v.Parent.Humanoid:LoadAnimation(Anim)
+							Anim:Play()
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972037411"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							local Damage = 7.5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.5)
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191296"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							local Damage = 3.5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.2)
+							Sound2:Play()
+							local Damage = 3.5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.2)
+							Sound2:Play()
+							local Damage = 3.5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.3)
+							Sound2:Play()
+							local Damage = 5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.35)
+							Sound2:Play()
+							local Damage = 5 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.45)
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191532"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,5)
+							local Damage = 6 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.4)
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10972191401"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,7.5)
+							local Damage = 7 * plr.PL.Value * plr.Character.Multiplier.Value
+							if v.Parent.Humanoid.Health < Damage then
+								Damage = v.Parent.Humanoid.Health - 0.01
+							end
+							v.Parent.Humanoid.Health -= Damage
+							v.Parent.LastHit.Value = plr
+							task.wait(0.95)
+							CanTurnCharacter = false
+							game:GetService("TweenService"):Create(plr.Character.HumanoidRootPart,TweenInfo.new(0.45),{CFrame=Pos*CFrame.new(0,20,-2.6)}):Play()
+							task.wait(0.65)
+							local Part = Instance.new("Part")
+							Part.Shape = Enum.PartType.Ball
+							Part.Material = "Neon"
+							Part.Massless = true
+							Part.Color = Color3.fromRGB(4,175,236)
+							Part.CastShadow = false
+							Part.Size = Vector3.new(1.844, 1.844, 1.844)
+							Part.CanCollide = false
+							local Motor = Instance.new("Motor6D")
+							Motor.Part0 = Part
+							Motor.Part1 = plr.Character["Right Arm"]
+							Motor.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+							local Part2 = Part:Clone()
+							Motor.Parent = Part
+							-- Part2.Color = Color3.fromRGB(248, 248, 248)
+							Part2.Size = Vector3.new(1.614, 1.614, 1.614)
+							Part2.Parent = Part
+							Part.Transparency = 0.5
+							local Weld = Instance.new("Weld")
+							Weld.Part0 = Part
+							Weld.Part1 = Part2
+							Weld.Parent = Part2
+							Part.Parent = workspace.MouseIgnore
+							task.wait(0.1)
+							local Sound3 = Instance.new("Sound")
+							Sound3.SoundId = "rbxassetid://10785324226"
+							Sound3.Volume = 3
+							Sound3.RollOffMaxDistance = 250
+							Sound3.Parent = plr.Character.Torso
+							Sound3:Play()
+							game:GetService("Debris"):AddItem(Sound3,5)
+							local Sound2 = Instance.new("Sound")
+							Sound2.SoundId = "rbxassetid://10789113427"
+							Sound2.Volume = 3
+							Sound2.RollOffMaxDistance = 250
+							Sound2.Parent = plr.Character.Torso
+							Sound2:Play()
+							game:GetService("Debris"):AddItem(Sound2,7.5)
+							task.wait(0.85)
+							local CameraShake = script.CameraShake:Clone()
+							CameraShake.Parent = plr.Character
+							Motor.Part0 = nil
+							Motor.Part1 = nil
+							Weld.Part0 = nil
+							Weld.Part1 = nil
+							Motor:Destroy()
+							Weld:Destroy()
+							Part.Size = Vector3.new(5,5,5)
+							Part2.Size = Vector3.new(4.5,4.5,4.5)
+							Part.Anchored = true
+							Part2.Anchored = true
+							Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,-3.687,0)
+							Part2.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,-3.687,0)
+							local Part3 = Instance.new("Part")
+							Part3.Anchored = true
+							Part3.Transparency = 0.5
+							Part3.Shape = Enum.PartType.Cylinder
+							Part3.Material = "Neon"
+							Part3.Massless = true
+							Part3.Color = Color3.fromRGB(4,175,236)
+							Part3.CastShadow = false
+							Part3.Size = Vector3.new(4, 3.577, 3.57)
+							Part3.CanCollide = false
+							Part3.CFrame = Part.CFrame*CFrame.new(0,0,0)*CFrame.Angles(0,math.rad(90),math.rad(-90))
+							local Part4 = Part3:Clone()
+							Part4.Transparency = 0
+							Part4.Size = Vector3.new(3.5,3.077,3.07)
+							Part4.Parent = workspace.MouseIgnore
+							Part3.Parent = workspace.MouseIgnore
+							game:GetService("TweenService"):Create(Part3,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{Size=Vector3.new(400,3.577, 3.57)}):Play()
+							game:GetService("TweenService"):Create(Part3,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=Part3.CFrame*CFrame.new(200,0,0)}):Play()
+							game:GetService("TweenService"):Create(Part4,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{Size=Vector3.new(399.5,3.077,3.07)}):Play()
+							game:GetService("TweenService"):Create(Part4,TweenInfo.new(2.5,Enum.EasingStyle.Linear),{CFrame=Part4.CFrame*CFrame.new(200,0,0)}):Play()
+							spawn(function()
+								local Stot = os.clock()
+								repeat
+									game:GetService("RunService").Heartbeat:Wait()
+									local Hit = {}
+									for i,V in pairs(workspace:GetPartsInPart(Part3,OverlapParams.new())) do
+										if V.Parent == v.Parent and not table.find(Hit,v.Parent) or V.Parent:FindFirstChild("Humanoid") and V.Parent:FindFirstChild("LastHit") and not V.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,V.Parent) and V.Parent ~= plr.Character then
+											table.insert(Hit,V.Parent)
+											if not v.Parent:FindFirstChild("Armor") then
+												v.Parent.Humanoid.Health -= 0.06 * plr.PL.Value * plr.Character.Multiplier.Value
+											else
+												v.Parent.Humanoid.Health -= 0.025 * plr.PL.Value * plr.Character.Multiplier.Value
+											end
+											V.Parent.LastHit.Value = plr
+										elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+											table.insert(Hit,v.Parent)
+											require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+										end
+									end
+									for i,V in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+										if V.Parent == v.Parent and not table.find(Hit,v.Parent) or V.Parent:FindFirstChild("Humanoid") and V.Parent:FindFirstChild("LastHit") and not V.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,V.Parent) and V.Parent ~= plr.Character then
+											table.insert(Hit,V.Parent)
+											if not v.Parent:FindFirstChild("Armor") then
+												v.Parent.Humanoid.Health -= 0.06 * plr.PL.Value * plr.Character.Multiplier.Value
+											else
+												v.Parent.Humanoid.Health -= 0.025 * plr.PL.Value * plr.Character.Multiplier.Value
+											end
+											V.Parent.LastHit.Value = plr
+										elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+											table.insert(Hit,v.Parent)
+											require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+										end
+									end
+								until os.clock() - Stot >= 2.3 or plr.Character.Humanoid.Health <= 0
+							end)
+							local SPAT = os.clock()
+							repeat
+								game:GetService("RunService").Heartbeat:Wait()
+							until os.clock() - SPAT >= 2.3 or plr.Character.Humanoid.Health <= 0
+							game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+							game:GetService("TweenService"):Create(Part2,TweenInfo.new(0.2),{Transparency=1}):Play()
+							game:GetService("TweenService"):Create(Part3,TweenInfo.new(0.2),{Transparency=1}):Play()
+							game:GetService("TweenService"):Create(Part4,TweenInfo.new(0.2),{Transparency=1}):Play()
+							CameraShake:Destroy()
+							Finished = true
+							plr.Character.HumanoidRootPart.Anchored = false
+							v.Parent.HumanoidRootPart.Anchored = false
+							v.Parent.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+							spawn(function()
+								task.wait(0.2)
+								Invincibility2:Destroy()
+								v.Parent.Humanoid.AutoRotate = true
+								Part:Destroy()
+								Part2:Destroy()
+								Part3:Destroy()
+								Part4:Destroy()
+								Stun:Destroy()
+							end)
+							Broke = true
+						elseif v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+							require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+						end
+						if Broke == true then
+							break
+						end
+					end
+				until os.clock() - AnimationTime + TimePassed >= 3.5 or TimePassed >= 3.5
+				Anim:Stop()
+				Invincibility:Destroy()
+				plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+				plr.Character.HumanoidRootPart.Anchored = false
+				plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+				plr.Character.Humanoid.AutoRotate = true
+			end
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Kaioken X4 Kamehameha" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value -= 600
+		for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+			an:Stop()
+		end
+		local Anim = Instance.new("Animation")
+		Anim.AnimationId = "rbxassetid://10939696267"
+		local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+		Anim:Play()
+		local Armor = Instance.new("BoolValue")
+		Armor.Name = "Armor"
+		Armor.Parent = plr.Character
+		plr.Character.Humanoid.AutoRotate = false
+		plr.Character.HumanoidRootPart.Anchored = true
+		plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0.001,0)
+		local Sound3 = Instance.new("Sound")
+		Sound3.SoundId = "rbxassetid://10785324226"
+		Sound3.Volume = 3
+		Sound3.RollOffMaxDistance = 250
+		Sound3.Parent = plr.Character.Torso
+		Sound3:Play()
+		game:GetService("Debris"):AddItem(Sound3,5)
+		local Sound2 = Instance.new("Sound")
+		Sound2.SoundId = "rbxassetid://10789113427"
+		Sound2.Volume = 0
+		Sound2.RollOffMaxDistance = 250
+		Sound2.Parent = plr.Character.Torso
+		Sound2:Play()
+		game:GetService("Debris"):AddItem(Sound2,5)
+		task.wait(1.85)
+		local Sound = Instance.new("Sound")
+		Sound.SoundId = "rbxassetid://10768899225"
+		Sound.Volume = 3
+		Sound.RollOffMaxDistance = 250
+		Sound.TimePosition = 0.1
+		Sound.Parent = plr.Character.Torso
+		Sound:Play()
+		game:GetService("Debris"):AddItem(Sound,5)
+		local Parta = Instance.new("Part")
+		Parta.BrickColor = BrickColor.new("Bright red")
+		Parta.Size = Vector3.new(5,5,5)
+		Parta.Shape = Enum.PartType.Ball
+		Parta.CanCollide = false
+		Parta.Anchored = true
+		Parta.Material = Enum.Material.Neon
+		Parta.CastShadow = false
+		Parta.CFrame = plr.Character.HumanoidRootPart.CFrame
+		Parta.Parent = workspace.MouseIgnore
+		game:GetService("TweenService"):Create(Parta,TweenInfo.new(0.4),{Size=Vector3.new(15,15,15)}):Play()
+		task.wait(0.2)
+		game:GetService("TweenService"):Create(Parta,TweenInfo.new(0.2),{Transparency=1}):Play()
+		pcall(function()
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.KaiokenAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Activated.Value = true
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 1.285, 0)
+			local Outline = game.ReplicatedStorage.KaiokenOutline:Clone()
+			Outline.Hair2.Transparency = 0.7
+			Outline.Hair.Transparency = 1
+			Outline.Parent = plr.Character
+			plr.Character.Head.Hair.Color = Color3.fromRGB(86, 36, 36)
+			game:GetService("Debris"):AddItem(Outline,15.85)
+			game:GetService("Debris"):AddItem(NewAura,20.85)
+		end)
+		task.wait(0.25)
+		Parta:Destroy()
+		task.wait(0.55)
+		task.wait(0.5)
+		local Sound2 = Instance.new("Sound")
+		Sound2.SoundId = "rbxassetid://10785324226"
+		Sound2.Volume = 3
+		Sound2.RollOffMaxDistance = 250
+		Sound2.Parent = plr.Character.Torso
+		Sound2:Play()
+		game:GetService("Debris"):AddItem(Sound2,5)
+		local Part = Instance.new("Part")
+		Part.Shape = Enum.PartType.Ball
+		Part.Material = "Neon"
+		Part.Massless = true
+		Part.Color = Color3.fromRGB(255,0,0)
+		Part.CastShadow = false
+		Part.Size = Vector3.new(1.844, 1.844, 1.844)
+		Part.CanCollide = false
+		local Motor = Instance.new("Motor6D")
+		Motor.Part0 = Part
+		Motor.Part1 = plr.Character["Right Arm"]
+		Motor.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+		local Part2 = Part:Clone()
+		Motor.Parent = Part
+		-- Part2.Color = Color3.fromRGB(248, 248, 248)
+		Part2.Size = Vector3.new(1.614, 1.614, 1.614)
+		Part2.Parent = Part
+		Part.Transparency = 0.5
+		local Weld = Instance.new("Weld")
+		Weld.Part0 = Part
+		Weld.Part1 = Part2
+		Weld.Parent = Part2
+		game:GetService("Debris"):AddItem(Part,20)
+		game:GetService("Debris"):AddItem(Part2,20)
+		Part.Parent = workspace.MouseIgnore
+		task.wait(0.25)
+		game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+		task.wait(0.3)
+		local Sound2 = Instance.new("Sound")
+		Sound2.SoundId = "rbxassetid://10785324226"
+		Sound2.Volume = 3
+		Sound2.RollOffMaxDistance = 250
+		Sound2.Parent = plr.Character.Torso
+		Sound2:Play()
+		game:GetService("Debris"):AddItem(Sound2,5)
+		task.wait(0.2)
+		local Start = os.clock()
+		repeat
+			game:GetService("RunService").Heartbeat:Wait()
+			plr.Character.HumanoidRootPart.Anchored = true
+			plr.Character.HumanoidRootPart.CFrame = CFrame.lookAt(plr.Character.HumanoidRootPart.Position,plr.PlayerGui.HUD.MousePosition.Value)
+		until os.clock() - Start >= 4.5 or plr.Character.Humanoid.Health <= 0
+		local Invincibility = Instance.new("BoolValue")
+		Invincibility.Name = "Invincibility"
+		Invincibility.Parent = plr.Character
+		local CameraShake = script.CameraShake:Clone()
+		CameraShake.Parent = plr.Character
+		game:GetService("Debris"):AddItem(CameraShake,9.2)
+		Motor.Part0 = nil
+		Motor.Part1 = nil
+		Weld.Part0 = nil
+		Weld.Part1 = nil
+		Motor:Destroy()
+		Weld:Destroy()
+		Part.Size = Vector3.new(11.5,11.5,11.5)
+		Part2.Size = Vector3.new(11,11,11)
+		Part.Anchored = true
+		Part2.Anchored = true
+		Part.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-7.687)
+		Part2.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-7.687)
+		local Part3 = Instance.new("Part")
+		Part3.Anchored = true
+		Part3.Transparency = 0.5
+		Part3.Shape = Enum.PartType.Cylinder
+		Part3.Material = "Neon"
+		Part3.Massless = true
+		Part3.Color = Color3.fromRGB(255,0,0)
+		Part3.CastShadow = false
+		Part3.Size = Vector3.new(3.5, 9.077, 9.07)
+		Part3.CanCollide = false
+		Part3.CFrame = Part.CFrame*CFrame.new(0,0,-1.5)*CFrame.Angles(0,math.rad(90),0)
+		local Part4 = Part3:Clone()
+		Part4.Transparency = 0
+		Part4.Size = Vector3.new(3.5,8.577,8.57)
+		Part4.Parent = workspace.MouseIgnore
+		Part3.Parent = workspace.MouseIgnore
+		game:GetService("Debris"):AddItem(Part3,20)
+		game:GetService("Debris"):AddItem(Part4,20)
+		game:GetService("TweenService"):Create(Part3,TweenInfo.new(9.2,Enum.EasingStyle.Linear),{Size=Vector3.new(2000, 9.077, 9.07)}):Play()
+		game:GetService("TweenService"):Create(Part3,TweenInfo.new(9.2,Enum.EasingStyle.Linear),{CFrame=Part3.CFrame*CFrame.new(1000,0,0)}):Play()
+		game:GetService("TweenService"):Create(Part4,TweenInfo.new(9.2,Enum.EasingStyle.Linear),{Size=Vector3.new(1999.5,8.577,8.57)}):Play()
+		game:GetService("TweenService"):Create(Part4,TweenInfo.new(9.2,Enum.EasingStyle.Linear),{CFrame=Part4.CFrame*CFrame.new(1000,0,0)}):Play()
+		spawn(function()
+			local Stot = os.clock()
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				local Hit = {}
+				for i,v in pairs(workspace:GetPartsInPart(Part3,OverlapParams.new())) do
+					if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+						table.insert(Hit,v.Parent)
+						if not v.Parent:FindFirstChild("Armor") then
+							v.Parent.Humanoid.Health -= 1 * plr.PL.Value * plr.Character.Multiplier.Value
+						else
+							v.Parent.Humanoid.Health -= 0.1 * plr.PL.Value * plr.Character.Multiplier.Value
+						end
+						v.Parent.LastHit.Value = plr
+					elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+						table.insert(Hit,v.Parent)
+						require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+					end
+				end
+				for i,v in pairs(workspace:GetPartsInPart(Part,OverlapParams.new())) do
+					if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+						table.insert(Hit,v.Parent)
+						if not v.Parent:FindFirstChild("Armor") then
+							v.Parent.Humanoid.Health -= 1 * plr.PL.Value * plr.Character.Multiplier.Value
+						else
+							v.Parent.Humanoid.Health -= 0.1 * plr.PL.Value * plr.Character.Multiplier.Value
+						end
+						v.Parent.LastHit.Value = plr
+					elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+						table.insert(Hit,v.Parent)
+						require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+					end
+				end
+			until os.clock() - Stot >= 7.6 or plr.Character.Humanoid.Health <= 0
+		end)
+		local SPAT = os.clock()
+		repeat
+			game:GetService("RunService").Heartbeat:Wait()
+		until os.clock() - SPAT >= 5.2 or plr.Character.Humanoid.Health <= 0
+		local Part6 = Instance.new("Part")
+		Part6.Shape = Enum.PartType.Ball
+		Part6.Material = "Neon"
+		Part6.Massless = true
+		Part6.Color = Color3.fromRGB(255,0,0)
+		Part6.CastShadow = false
+		Part6.Size = Vector3.new(1.844, 1.844, 1.844)
+		Part6.CanCollide = false
+		local Motor2 = Instance.new("Motor6D")
+		Motor2.Part0 = Part6
+		Motor.Part1 = plr.Character["Right Arm"]
+		Motor2.C0 = CFrame.new(-0.0430145264, 0.301236868, -1.3901062, -0.976568699, 0.0732738376, 0.202330008, -0.17241849, 0.296151787, -0.939449131, -0.128757685, -0.952324629, -0.276579708)
+		local Part7 = Part6:Clone()
+		Motor2.Parent = Part6
+		-- Part7.Color = Color3.fromRGB(248, 248, 248)
+		Part7.Size = Vector3.new(1.614, 1.614, 1.614)
+		Part7.Parent = Part6
+		Part6.Transparency = 0.5
+		local Weld2 = Instance.new("Weld")
+		Weld2.Part0 = Part7
+		Weld2.Part1 = Part6
+		Weld2.Parent = Part7
+		Part6.Parent = workspace.MouseIgnore
+		Motor2.Part0 = nil
+		Motor2.Part1 = nil
+		Weld2.Part0 = nil
+		Weld2.Part1 = nil
+		Motor2:Destroy()
+		Weld2:Destroy()
+		Part6.Size = Vector3.new(14.5,14.5,14.5)
+		Part7.Size = Vector3.new(14,14,14)
+		Part6.Anchored = true
+		Part7.Anchored = true
+		Part6.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-8.687)
+		Part7.CFrame = plr.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-8.687)
+		local Part8 = Instance.new("Part")
+		Part8.Anchored = true
+		Part8.Transparency = 0.5
+		Part8.Shape = Enum.PartType.Cylinder
+		Part8.Material = "Neon"
+		Part8.Massless = true
+		Part8.Color = Color3.fromRGB(255,0,0)
+		Part8.CastShadow = false
+		Part8.Size = Vector3.new(3.5, 12.077, 12.07)
+		Part8.CanCollide = false
+		Part8.CFrame = Part7.CFrame*CFrame.new(0,0,-1.5)*CFrame.Angles(0,math.rad(90),0)
+		local Part9 = Part8:Clone()
+		Part9.Transparency = 0
+		Part9.Size = Vector3.new(3.5,11.577,11.57)
+		Part9.Parent = workspace.MouseIgnore
+		Part8.Parent = workspace.MouseIgnore
+		game:GetService("Debris"):AddItem(Part6,20)
+		game:GetService("Debris"):AddItem(Part7,20)
+		game:GetService("Debris"):AddItem(Part8,20)
+		game:GetService("Debris"):AddItem(Part9,20)
+		game:GetService("TweenService"):Create(Part8,TweenInfo.new(3.9,Enum.EasingStyle.Linear),{Size=Vector3.new(1600, 12.577, 12.57)}):Play()
+		game:GetService("TweenService"):Create(Part8,TweenInfo.new(3.9,Enum.EasingStyle.Linear),{CFrame=Part8.CFrame*CFrame.new(800,0,0)}):Play()
+		game:GetService("TweenService"):Create(Part9,TweenInfo.new(3.9,Enum.EasingStyle.Linear),{Size=Vector3.new(1599.5,12.077,12.07)}):Play()
+		game:GetService("TweenService"):Create(Part9,TweenInfo.new(3.9,Enum.EasingStyle.Linear),{CFrame=Part9.CFrame*CFrame.new(800,0,0)}):Play()
+		spawn(function()
+			local Stot = os.clock()
+			repeat
+				game:GetService("RunService").Heartbeat:Wait()
+				local Hit = {}
+				for i,v in pairs(workspace:GetPartsInPart(Part8,OverlapParams.new())) do
+					if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+						table.insert(Hit,v.Parent)
+						if not v.Parent:FindFirstChild("Armor") then
+							v.Parent.Humanoid.Health -= 1.2 * plr.PL.Value * plr.Character.Multiplier.Value
+						else
+							v.Parent.Humanoid.Health -= 0.2 * plr.PL.Value * plr.Character.Multiplier.Value
+						end
+						v.Parent.LastHit.Value = plr
+					elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+						table.insert(Hit,v.Parent)
+						require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+					end
+				end
+				for i,v in pairs(workspace:GetPartsInPart(Part6,OverlapParams.new())) do
+					if v.Parent:FindFirstChild("Humanoid") and v.Parent:FindFirstChild("LastHit") and not v.Parent:FindFirstChild("Invincibility") and not v.Parent:FindFirstChild("Counter") and not table.find(Hit,v.Parent) and v.Parent ~= plr.Character then
+						table.insert(Hit,v.Parent)
+						if not v.Parent:FindFirstChild("Armor") then
+							v.Parent.Humanoid.Health -= 1.2 * plr.PL.Value * plr.Character.Multiplier.Value
+						else
+							v.Parent.Humanoid.Health -= 0.2 * plr.PL.Value * plr.Character.Multiplier.Value
+						end
+						v.Parent.LastHit.Value = plr
+					elseif v.Parent:FindFirstChild("Humanoid") and not table.find(Hit,v.Parent) and v.Parent:FindFirstChild("LastHit") and v.Parent:FindFirstChild("Counter") and not v.Parent:FindFirstChild("Invincibility") then
+						table.insert(Hit,v.Parent)
+						require(game.ReplicatedStorage.Counters).Counter(plr.Character,v.Parent,v.Parent.Counter.Value,Move)
+					end
+				end
+			until os.clock() - Stot >= 3.9 or plr.Character.Humanoid.Health <= 0
+		end)
+		task.wait(3.9)
+		plr.Character.Head.Hair.Color = Color3.fromRGB(67,67,67)
+		plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+		plr.Character.HumanoidRootPart.AuraAttachment.Aura.Name = "Aura2"
+		local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+		NewAura.Name = "Aura"
+		NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+		plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		plr.Character.HumanoidRootPart.Anchored = false
+		plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+		plr.Character.Humanoid.AutoRotate = true
+		Armor:Destroy()
+		Invincibility:Destroy()
+		game:GetService("TweenService"):Create(Part,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part2,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part3,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part4,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part6,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part7,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part8,TweenInfo.new(2),{Transparency=1}):Play()
+		game:GetService("TweenService"):Create(Part9,TweenInfo.new(2),{Transparency=1}):Play()
+		task.wait(1.2)
+		spawn(function()
+			task.wait(0.8)
+			Part:Destroy()
+			Part2:Destroy()
+			Part3:Destroy()
+			Part4:Destroy()
+			Part6:Destroy()
+			Part7:Destroy()
+			Part8:Destroy()
+			Part9:Destroy()
+		end)
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Saiyan Soul" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		plr.PlayerGui.HUD.KiValue.Value += 800
+		if plr.PlayerGui.HUD.KiValue.Value > 3000 then
+			plr.PlayerGui.HUD.KiValue.Value = 3000
+		end
+		plr.Character.Humanoid.Health += plr.Character.Humanoid.MaxHealth / 100 * 8
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "Ultra Instinct" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PL.Value < 1000000 then
+			print(plr.Name.." got kicked for increasing values on the client.")
+			plr:Kick("Anti-cheat detect: increasing values on the client")
+		end
+		if plr.CurrentForm.Value ~= "UIO" then
+			plr.Character.Multiplier.Value = 800
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("Institutional white")
+			Part.Size = Vector3.new(15,15,15)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("Debris"):AddItem(Part,5)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.UIHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.0166511536, 0.999985218, -0.105514526, -1, 0, 0, 0, 1, 0, 0, 0, -1)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(0,255,255))
+				NewAura.Name = "Aura"
+				NewAura.Brightness = 2
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+			end)
+			if plr then
+				plr.CurrentForm.Value = "UIO"
+			end
+			if plr then
+				local MaxHP = plr.Character.Humanoid.MaxHealth
+				local HP = plr.Character.Humanoid.Health
+				local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+				plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+				plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			end
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(9.5,9.5,9.5)}):Play()
+			task.wait(0.2)
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.2)
+		else
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.BaseHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+			end)
+			plr.CurrentForm.Value = "BASE"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 1
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "SSJ" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PL.Value < 50000 then
+			print(plr.Name.." got kicked for increasing values on the client.")
+			plr:Kick("Anti-cheat detect: increasing values on the client")
+		end
+		if plr.CurrentForm.Value ~= "SSJ" then
+			local Invincibility = Instance.new("BoolValue")
+			Invincibility.Name = "Invincibility"
+			Invincibility.Parent = plr.Character
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10768346462"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			local VFX = game.ReplicatedStorage.SSJTransformationVFX:Clone()
+			VFX.RootPart.Value = plr.Character.HumanoidRootPart
+			VFX.Parent = workspace.MouseIgnore
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Sound2 = Instance.new("Sound")
+			Sound2.SoundId = "rbxassetid://10785325244"
+			Sound2.Volume = 3
+			Sound2.RollOffMaxDistance = 250
+			Sound2.Parent = plr.Character.Torso
+			Sound2:Play()
+			game:GetService("Debris"):AddItem(Sound2,10)
+			task.wait(3.1)
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("New Yeller")
+			Part.Size = Vector3.new(0.5,0.5,0.5)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(15,15,15)}):Play()
+			task.wait(0.2)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.SSJHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(-0.0199596882, 0.999499798, 0.218948364, -0.999918997, -0.00796987955, 0.00993279088, -0.00795589015, 0.999967337, 0.00144716306, -0.00994400028, 0.00136802159, -0.999949634)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(255,255,0))
+				NewAura.Name = "Aura"
+				NewAura.Brightness = 2
+				NewAura.Activated.Value = true
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+			end)
+			plr.CurrentForm.Value = "SSJ"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 50
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.25)
+			Part:Destroy()
+			task.wait(0.35)
+			game:GetService("Chat"):Chat(plr.Character.Head, "This will be a good match.", "White")
+			local Sounda = Instance.new("Sound")
+			Sounda.SoundId = "rbxassetid://10785325980"
+			Sounda.Volume = 3
+			Sounda.RollOffMaxDistance = 250
+			Sounda.Parent = plr.Character.Torso
+			Sounda:Play()
+			game:GetService("Debris"):AddItem(Sounda,10)
+			task.wait(0.35)
+			game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+			task.wait(0.2)
+			task.wait(1.45)
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+			spawn(function()
+				task.wait(0.3)
+				Invincibility:Destroy()
+			end)
+		else
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.BaseHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+			end)
+			plr.CurrentForm.Value = "BASE"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 1
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "SSJ2" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PL.Value < 200000 then
+			print(plr.Name.." got kicked for increasing values on the client.")
+			plr:Kick("Anti-cheat detect: increasing values on the client")
+		end
+		if plr.CurrentForm.Value ~= "SSJ2" then
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Invincibility = Instance.new("BoolValue")
+			Invincibility.Name = "Invincibility"
+			Invincibility.Parent = plr.Character
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10781369394"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			task.wait(0.65)
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("New Yeller")
+			Part.Size = Vector3.new(0.5,0.5,0.5)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(15,15,15)}):Play()
+			task.wait(0.2)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.SSJ2Hair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(-0.0578918457, 0.908309937, 0.544616699, 0.999998808, 1.6563421e-05, -0.00158115372, -1.76791636e-05, 0.999999762, -0.000705638726, 0.00158114161, 0.000705665734, 0.999998569)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(255,255,0))
+				NewAura.Name = "Aura"
+				NewAura.Brightness = 2
+				NewAura.Activated.Value = true
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+			end)
+			plr.CurrentForm.Value = "SSJ2"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 100
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.25)
+			Part:Destroy()
+			task.wait(0.55)
+			game:GetService("Chat"):Chat(plr.Character.Head, "Not bad.", "White")
+			local Sounda = Instance.new("Sound")
+			Sounda.SoundId = "rbxassetid://10785323232"
+			Sounda.Volume = 3
+			Sounda.RollOffMaxDistance = 250
+			Sounda.Parent = plr.Character.Torso
+			Sounda:Play()
+			game:GetService("Debris"):AddItem(Sounda,10)
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+			local Start = os.clock()
+			spawn(function()
+				task.wait(0.15 - (os.clock() - Start))
+				game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+			end)
+			spawn(function()
+				task.wait(0.3)
+				Invincibility:Destroy()
+			end)
+		else
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.BaseHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+			end)
+			plr.CurrentForm.Value = "BASE"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 1
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "SSJG" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PL.Value < 500000 then
+			print(plr.Name.." got kicked for increasing values on the client.")
+			plr:Kick("Anti-cheat detect: increasing values on the client")
+		end
+		if plr.CurrentForm.Value ~= "SSJG" then
+			local Invincibility = Instance.new("BoolValue")
+			Invincibility.Name = "Invincibility"
+			Invincibility.Parent = plr.Character
+			if plr.CurrentForm.Value ~= "SSJ" and plr.CurrentForm.Value ~= "SSJ2" then
+				for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+					an:Stop()
+				end
+				local Anim = Instance.new("Animation")
+				Anim.AnimationId = "rbxassetid://10783656721"
+				local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+				Anim:Play()
+				local Sound3 = Instance.new("Sound")
+				Sound3.SoundId = "rbxassetid://10785324226"
+				Sound3.Volume = 3
+				Sound3.RollOffMaxDistance = 250
+				Sound3.Parent = plr.Character.Torso
+				Sound3:Play()
+				game:GetService("Debris"):AddItem(Sound3,5)
+				task.wait(0.45)
+			else
+				for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+					an:Stop()
+				end
+				local Anim = Instance.new("Animation")
+				Anim.AnimationId = "rbxassetid://10783804418"
+				local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+				Anim:Play()
+				local Part = Instance.new("Part")
+				Part.BrickColor = BrickColor.new("Institutional white")
+				Part.Size = Vector3.new(15,15,15)
+				Part.Shape = Enum.PartType.Ball
+				Part.CanCollide = false
+				Part.Anchored = true
+				Part.Material = Enum.Material.Neon
+				Part.CastShadow = false
+				Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+				Part.Parent = workspace.MouseIgnore
+				game:GetService("Debris"):AddItem(Part,5)
+				pcall(function()
+					plr.Character.Head.Hair:Destroy()
+					plr.Character.Head.Hair6D:Destroy()
+					local Hair = game.ReplicatedStorage.BaseHair:Clone()
+					Hair.Name = "Hair"
+					local Motor = Instance.new("Motor6D")
+					Motor.Name = "Hair6D"
+					Motor.Part0 = plr.Character.Head
+					Motor.Part1 = Hair
+					Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+					Motor.Parent = plr.Character.Head
+					Hair.Parent = plr.Character.Head
+				end)
+				plr.CurrentForm.Value = "BASE"
+				local MaxHP = plr.Character.Humanoid.MaxHealth
+				local HP = plr.Character.Humanoid.Health
+				local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+				plr.Character.Multiplier.Value = 1
+				plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+				plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Name = "Aura"
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+				game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(9.5,9.5,9.5)}):Play()
+				task.wait(0.2)
+				game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+				task.wait(1)
+			end
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("Bright red")
+			Part.Size = Vector3.new(0.5,0.5,0.5)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(15,15,15)}):Play()
+			task.wait(0.2)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.SSJGHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+				NewAura.Color = ColorSequence.new(Color3.fromRGB(255,0,0))
+				NewAura.Name = "Aura"
+				NewAura.Brightness = 2
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+			end)
+			plr.CurrentForm.Value = "SSJG"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 600
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.25)
+			Part:Destroy()
+			local Start = os.clock()
+			spawn(function()
+				task.wait(0.7 - (os.clock() - Start))
+				game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+				task.wait(0.2)
+			end)
+			task.wait(0.25)
+			spawn(function()
+				task.wait(0.3)
+				Invincibility:Destroy()
+			end)
+		else
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.BaseHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+			end)
+			plr.CurrentForm.Value = "BASE"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 1
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	elseif Move == "SSJB" then
+		if plr.PlayerGui.HUD.Busy.Value == true then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = true
+		if plr.PL.Value < 800000 then
+			print(plr.Name.." got kicked for increasing values on the client.")
+			plr:Kick("Anti-cheat detect: increasing values on the client")
+		end
+		if plr.CurrentForm.Value ~= "SSJB" then
+			local Sound3 = Instance.new("Sound")
+			Sound3.SoundId = "rbxassetid://10785324226"
+			Sound3.Volume = 3
+			Sound3.RollOffMaxDistance = 250
+			Sound3.Parent = plr.Character.Torso
+			Sound3:Play()
+			game:GetService("Debris"):AddItem(Sound3,5)
+			local Invincibility = Instance.new("BoolValue")
+			Invincibility.Name = "Invincibility"
+			Invincibility.Parent = plr.Character
+			for i,an in pairs(plr.Character.Humanoid:GetPlayingAnimationTracks()) do
+				an:Stop()
+			end
+			local Anim = Instance.new("Animation")
+			Anim.AnimationId = "rbxassetid://10787223480"
+			local Anim = plr.Character.Humanoid:LoadAnimation(Anim)
+			Anim:Play()
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = true
+			task.wait(2.3)
+			local Sound = Instance.new("Sound")
+			Sound.SoundId = "rbxassetid://10768899225"
+			Sound.Volume = 3
+			Sound.RollOffMaxDistance = 250
+			Sound.TimePosition = 0.1
+			Sound.Parent = plr.Character.Torso
+			Sound:Play()
+			game:GetService("Debris"):AddItem(Sound,5)
+			local Part = Instance.new("Part")
+			Part.BrickColor = BrickColor.new("Cyan")
+			Part.Size = Vector3.new(0.5,0.5,0.5)
+			Part.Shape = Enum.PartType.Ball
+			Part.CanCollide = false
+			Part.Anchored = true
+			Part.Material = Enum.Material.Neon
+			Part.CastShadow = false
+			Part.CFrame = plr.Character.HumanoidRootPart.CFrame
+			Part.Parent = workspace.MouseIgnore
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.4),{Size=Vector3.new(15,15,15)}):Play()
+			task.wait(0.2)
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.SSJBHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(-0.0199596882, 0.999499798, 0.218948364, -0.999918997, -0.00796987955, 0.00993279088, -0.00795589015, 0.999967337, 0.00144716306, -0.00994400028, 0.00136802159, -0.999949634)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+				plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+				local NewAura = game.ReplicatedStorage.SSJBAura:Clone()
+				NewAura.Name = "Aura"
+				NewAura.Activated.Value = true
+				NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+				plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 1.285, 0)
+			end)
+			plr.CurrentForm.Value = "SSJB"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 800
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			game:GetService("TweenService"):Create(Part,TweenInfo.new(0.2),{Transparency=1}):Play()
+			task.wait(0.25)
+			Part:Destroy()
+			task.wait(0.55)
+			game:GetService("Chat"):Chat(plr.Character.Head, "This is a power even greater than a Super Saiyan God!", "White")
+			local Sounda = Instance.new("Sound")
+			Sounda.SoundId = "rbxassetid://10787368720"
+			Sounda.Volume = 3
+			Sounda.RollOffMaxDistance = 250
+			Sounda.Parent = plr.Character.Torso
+			Sounda:Play()
+			game:GetService("Debris"):AddItem(Sounda,10)
+			local Start = os.clock()
+			spawn(function()
+				task.wait(0.15 - (os.clock() - Start))
+				game:GetService("TweenService"):Create(Sound,TweenInfo.new(0.2),{Volume=0}):Play()
+			end)
+			task.wait(0.4)
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura.Activated.Value = false
+			spawn(function()
+				task.wait(0.3)
+				Invincibility:Destroy()
+			end)
+		else
+			pcall(function()
+				plr.Character.Head.Hair:Destroy()
+				plr.Character.Head.Hair6D:Destroy()
+				local Hair = game.ReplicatedStorage.BaseHair:Clone()
+				Hair.Name = "Hair"
+				local Motor = Instance.new("Motor6D")
+				Motor.Name = "Hair6D"
+				Motor.Part0 = plr.Character.Head
+				Motor.Part1 = Hair
+				Motor.C0 = CFrame.new(0.196350098, 0.767416, 0.113555908, -0.999950528, 1.70025469e-05, 0.00994993653, 2.400007e-05, 0.999999762, 0.000703154074, -0.00994992256, 0.000703358033, -0.99995029)
+				Motor.Parent = plr.Character.Head
+				Hair.Parent = plr.Character.Head
+			end)
+			plr.CurrentForm.Value = "BASE"
+			local MaxHP = plr.Character.Humanoid.MaxHealth
+			local HP = plr.Character.Humanoid.Health
+			local Percentage = plr.Character.Humanoid.Health/plr.Character.Humanoid.MaxHealth*100
+			plr.Character.Multiplier.Value = 1
+			plr.Character.Humanoid.MaxHealth = plr.HP.Value * plr.Character.Multiplier.Value
+			plr.Character.Humanoid.Health = plr.HP.Value * plr.Character.Multiplier.Value / 100 * Percentage
+			plr.Character.HumanoidRootPart.AuraAttachment.Aura:Destroy()
+			local NewAura = game.ReplicatedStorage.BaseAura:Clone()
+			NewAura.Name = "Aura"
+			NewAura.Parent = plr.Character.HumanoidRootPart.AuraAttachment
+			plr.Character.HumanoidRootPart.AuraAttachment.Position = Vector3.new(0, 3.185, 0)
+		end
+		if plr.PlayerGui.HUD.Busy.Value == false then
+			print(plr.Name.." got kicked for movestacking.")
+			plr:Kick("Suspected movestacking")
+		end
+		plr.PlayerGui.HUD.Busy.Value = false
+	end
+end
